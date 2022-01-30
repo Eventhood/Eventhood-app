@@ -1,13 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import { registerRootComponent } from 'expo';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import BottomTab from './navigations/BottomTab';
+import { NativeBaseProvider } from 'native-base';
+
+const navTheme = DefaultTheme;
+navTheme.colors.background = '#F5F5F5';
 
 export default registerRootComponent(function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider>
+      <StatusBar
+        animated={true}
+        translucent={true}
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        networkActivityIndicatorVisible={true}
+      />
+      <NavigationContainer theme={navTheme}>
+        <BottomTab />
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 });
 const styles = StyleSheet.create({
