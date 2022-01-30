@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MenuScreen from '../screens/MenuScreen';
 import ViewProfileScreen from '../screens/ViewProfileScreen';
 import YourEventScreen from '../screens/YourEventScreen';
-import SignUpEventScreen from '../screens/SignupEventScreen';
+import SignUpEventScreen from '../screens/SignUpEventScreen';
 import FollowingScreen from '../screens/FollowingScreen';
 import HelpScreen from '../screens/HelpScreen';
 import LegalScreen from '../screens/LegalScreen';
