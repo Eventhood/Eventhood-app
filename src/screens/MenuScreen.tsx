@@ -1,8 +1,9 @@
 import { TouchableHighlight, ScrollView } from 'react-native';
+import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+
 import SafeAreaView from '../components/SafeAreaView';
 import MenuProfileCard from '../components/MenuProfileCard';
 import MenuNavigationLink from '../components/MenuNavigationLink';
-import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ProfileScreen = ({ navigation }: any) => {
   return (
@@ -10,8 +11,8 @@ const ProfileScreen = ({ navigation }: any) => {
       <ScrollView>
         <MenuProfileCard />
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DBD1D5DB"
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
           onPress={() => navigation.push('Profile')}
         >
           <MenuNavigationLink
@@ -20,8 +21,8 @@ const ProfileScreen = ({ navigation }: any) => {
           />
         </TouchableHighlight>
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DB"
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
           onPress={() => navigation.push('YourEvent')}
         >
           <MenuNavigationLink
@@ -30,8 +31,8 @@ const ProfileScreen = ({ navigation }: any) => {
           />
         </TouchableHighlight>
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DB"
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
           onPress={() => navigation.push('SignUpEvent')}
         >
           <MenuNavigationLink
@@ -40,8 +41,8 @@ const ProfileScreen = ({ navigation }: any) => {
           />
         </TouchableHighlight>
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DB"
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
           onPress={() => navigation.push('Following')}
         >
           <MenuNavigationLink
@@ -50,9 +51,9 @@ const ProfileScreen = ({ navigation }: any) => {
           />
         </TouchableHighlight>
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DB"
-          onPress={() => navigation.push('Help')}
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
+          onPress={() => navigation.push('Help-m')}
         >
           <MenuNavigationLink
             name="Help"
@@ -60,8 +61,8 @@ const ProfileScreen = ({ navigation }: any) => {
           />
         </TouchableHighlight>
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DB"
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
           onPress={() => navigation.push('Legal')}
         >
           <MenuNavigationLink
@@ -70,8 +71,8 @@ const ProfileScreen = ({ navigation }: any) => {
           />
         </TouchableHighlight>
         <TouchableHighlight
-          activeOpacity={0.1}
-          underlayColor="#D1D5DB"
+          activeOpacity={0.5}
+          underlayColor="#D1D5DB75"
           onPress={() => navigation.push('About')}
         >
           <MenuNavigationLink
@@ -79,7 +80,7 @@ const ProfileScreen = ({ navigation }: any) => {
             icon={<MaterialCommunityIcons name="application" color="#1E293B" size={30} />}
           />
         </TouchableHighlight>
-        <TouchableHighlight activeOpacity={0.1} underlayColor="#D1D5DB">
+        <TouchableHighlight activeOpacity={0.5} underlayColor="#D1D5DB75">
           <MenuNavigationLink
             name="Logout"
             icon={<MaterialCommunityIcons name="logout" color="#1E293B" size={30} />}

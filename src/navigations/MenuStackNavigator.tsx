@@ -1,12 +1,14 @@
 import { createStackNavigator } from '@react-navigation/stack';
+
 import MenuScreen from '../screens/MenuScreen';
 import ViewProfileScreen from '../screens/ViewProfileScreen';
 import YourEventScreen from '../screens/YourEventScreen';
 import SignUpEventScreen from '../screens/SignUpEventScreen';
 import FollowingScreen from '../screens/FollowingScreen';
-import HelpScreen from '../screens/HelpScreen';
 import LegalScreen from '../screens/LegalScreen';
 import AboutScreen from '../screens/AboutScreen';
+import HelpStackNavigation from './HelpStackNavigation';
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -59,11 +61,11 @@ const MenuStackNavigator = () => {
         component={FollowingScreen}
       />
       <Stack.Screen
-        name="Help"
+        name="Help-m"
         options={() => ({
-          headerTitleAlign: 'center',
+          headerShown: false,
         })}
-        component={HelpScreen}
+        component={HelpStackNavigation}
       />
       <Stack.Screen
         name="Legal"
