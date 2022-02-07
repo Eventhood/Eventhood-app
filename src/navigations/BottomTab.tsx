@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
+
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
-import MenuScreen from '../screens/MenuScreen';
-import { View, StyleSheet } from 'react-native';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { MenuStackNavigator } from './StackNavigator';
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +16,7 @@ const BottomTab = () => {
         tabBarStyle: styles.bottomNavbar,
         headerShown: false,
         tabBarActiveTintColor: '#3B82F6',
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarInactiveTintColor: '#52525B95',
       }}
     >
       <Tab.Screen
