@@ -13,6 +13,7 @@ const MenuNavigationLink = ({ name, icon }: { name: string; icon: any }) => {
     </Flex>
   );
 };
+
 const styles = StyleSheet.create({
   links: {
     borderBottomColor: '#64748B25',
