@@ -1,6 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
 
-
 import HelpScreen from '../screens/HelpScreen';
 import ContactUsScreen from '../screens/ContactUsScreen';
 import TopicStackNavigation from './TopicStackNavigation';
@@ -16,7 +15,6 @@ const screenOptionStyle = {
 };
 
 const HelpStackNavigation = () => {
- 
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen
