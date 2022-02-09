@@ -9,7 +9,7 @@ const ProfileScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <MenuProfileCard />
+        <MenuProfileCard navigation={navigation} />
         <TouchableHighlight
           activeOpacity={0.5}
           underlayColor="#D1D5DB75"

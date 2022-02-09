@@ -9,6 +9,7 @@ import SignUpEventScreen from '../screens/SignUpEventScreen';
 import FollowingScreen from '../screens/FollowingScreen';
 import LegalScreen from '../screens/LegalScreen';
 import AboutScreen from '../screens/AboutScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 import HelpStackNavigation from './HelpStackNavigation';
 
 const Stack = createStackNavigator();
@@ -112,6 +113,14 @@ const MenuStackNavigator = ({ navigation, route }: any) => {
           headerTitleAlign: 'center',
         })}
         component={AboutScreen}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        options={() => ({
+          headerTitleAlign: 'center',
+          title: 'Edit Profile',
+        })}
+        component={EditProfileScreen}
       />
     </Stack.Navigator>
   );
