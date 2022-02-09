@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Avatar, Flex, Center, Text } from 'native-base';
 
-const MenuProfileCard = () => {
+const MenuProfileCard = ({ navigation }: any) => {
   return (
     <Flex style={styles.profileContainer} direction="row">
       <Avatar
@@ -17,7 +17,9 @@ const MenuProfileCard = () => {
           <Text my="1" fontWeight="bold">
             Name
           </Text>
-          <Text style={styles.profileLink}>Edit Profile</Text>
+          <Text style={styles.profileLink} onPress={() => navigation.push('EditProfile')}>
+            Edit Profile
+          </Text>
         </Flex>
       </Center>
     </Flex>
