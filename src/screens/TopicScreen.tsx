@@ -4,14 +4,6 @@ import TopicCard from '../components/TopicCard';
 import QuestionCard from '../components/QuestionCard';
 import { useEffect, useState } from 'react';
 import { URL } from '@env';
-
-const topics = [
-  { id: '1', question: 'Question 1' },
-  { id: '2', question: 'Question 2' },
-  { id: '3', question: 'Question 3' },
-  { id: '4', question: 'Question 4' },
-  { id: '5', question: 'Question 5' },
-];
 interface Question {
   _id: string;
   name: string;
