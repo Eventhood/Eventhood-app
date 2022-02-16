@@ -101,6 +101,7 @@ const ContactUsScreen = () => {
     </TouchableWithoutFeedback>
   );
 };
+
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#27272A',
@@ -108,4 +109,5 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
 export default ContactUsScreen;

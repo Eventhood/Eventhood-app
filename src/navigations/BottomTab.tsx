@@ -31,6 +31,7 @@ const BottomTab = () => {
               </View>
             );
           },
+          tabBarHideOnKeyboard: true,
         }}
       ></Tab.Screen>
       <Tab.Screen

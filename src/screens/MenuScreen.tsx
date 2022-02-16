@@ -1,11 +1,23 @@
 import { TouchableHighlight, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { app } from '../utils/firebase';
+import { getAuth } from 'firebase/auth';
 
 import SafeAreaView from '../components/SafeAreaView';
 import MenuProfileCard from '../components/MenuProfileCard';
 import MenuNavigationLink from '../components/MenuNavigationLink';
 
+const auth = getAuth(app);
+
 const ProfileScreen = ({ navigation }: any) => {
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -80,7 +92,7 @@ const ProfileScreen = ({ navigation }: any) => {
             icon={<MaterialCommunityIcons name="application" color="#1E293B" size={30} />}
           />
         </TouchableHighlight>
-        <TouchableHighlight activeOpacity={0.5} underlayColor="#D1D5DB75">
+        <TouchableHighlight activeOpacity={0.5} underlayColor="#D1D5DB75" onPress={handleSignOut}>
           <MenuNavigationLink
             name="Logout"
             icon={<MaterialCommunityIcons name="logout" color="#1E293B" size={30} />}
