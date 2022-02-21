@@ -17,7 +17,7 @@ const MenuProfileCard = ({ navigation }: any) => {
           <Text my="1" fontWeight="bold">
             Name
           </Text>
-          <Text style={styles.profileLink} onPress={() => navigation.push('EditProfile')}>
+          <Text style={styles.profileLink} onPress={() => navigation.push('EditProfile-m')}>
             Edit Profile
           </Text>
         </Flex>

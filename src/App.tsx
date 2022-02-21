@@ -9,6 +9,10 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from './utils/firebase';
 import AuthStack from './navigations/AuthStack';
 
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['NativeBase:']);
+
 const navTheme = DefaultTheme;
 navTheme.colors.background = '#F5F5F5';
 
