@@ -13,7 +13,7 @@ const auth = getAuth(app);
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [loginError, setLoginError] = useState('');
 
   const onLogin = () => {

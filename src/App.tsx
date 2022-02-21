@@ -25,20 +25,12 @@ export default registerRootComponent(function App() {
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (users) => {
       if (users) {
-        console.log('login--------', users.uid);
         setUser(users);
 
         setIsLoading(false);
-        console.log('login--------', users.uid);
       } else {
-        // User is signed out
-        // ...
-        console.log('signed out--------');
-
         setIsLoading(false);
         setUser(undefined);
-
-        console.log('signed out--------');
       }
     });
 
