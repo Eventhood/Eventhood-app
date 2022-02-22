@@ -66,13 +66,7 @@ const SignupScreen = ({ navigation }: any) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <Center my={8}>
-            <Image
-              source={{
-                uri: 'https://wallpaperaccess.com/full/317501.jpg',
-              }}
-              alt="Alternate Text"
-              size="xl"
-            />
+            <Image source={require('../assets/logo.png')} alt="Alternate Text" size="xl" />
           </Center>
           <Box style={styles.container}>
             <Center my={4}>
