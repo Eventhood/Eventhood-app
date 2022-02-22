@@ -2,6 +2,7 @@ import { TouchableHighlight, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { getAuth } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 import SafeAreaView from '../components/SafeAreaView';
 import MenuProfileCard from '../components/MenuProfileCard';
@@ -12,6 +13,8 @@ const auth = getAuth(app);
 
 const ProfileScreen = ({ navigation }: any) => {
   const [userData, setUserData] = useState<any>();
+
+  const isFocused = useIsFocused();
 
   const handleSignOut = async () => {
     try {
@@ -29,7 +32,7 @@ const ProfileScreen = ({ navigation }: any) => {
       email: auth.currentUser?.providerData[0].email,
     };
     setUserData(userDataReorder);
-  }, []);
+  }, [isFocused]);
 
   return (
     <SafeAreaView>
