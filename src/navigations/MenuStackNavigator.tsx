@@ -9,8 +9,8 @@ import SignUpEventScreen from '../screens/SignUpEventScreen';
 import FollowingScreen from '../screens/FollowingScreen';
 import LegalScreen from '../screens/LegalScreen';
 import AboutScreen from '../screens/AboutScreen';
-import EditProfileScreen from '../screens/EditProfileScreen';
 import HelpStackNavigation from './HelpStackNavigation';
+import EditUserNavigation from './EditUserNavigation';
 
 const Stack = createStackNavigator();
 
@@ -30,10 +30,12 @@ const bottomNavHiddenRoutes = [
   'Help-m',
   'Legal',
   'About',
+  'EditProfile-m',
 ];
 const MenuStackNavigator = ({ navigation, route }: any) => {
   useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route) || '';
+
     if (bottomNavHiddenRoutes.includes(routeName)) {
       navigation.setOptions({ tabBarStyle: { display: 'none' } });
     } else {
@@ -115,12 +117,11 @@ const MenuStackNavigator = ({ navigation, route }: any) => {
         component={AboutScreen}
       />
       <Stack.Screen
-        name="EditProfile"
+        name="EditProfile-m"
         options={() => ({
-          headerTitleAlign: 'center',
-          title: 'Edit Profile',
+          headerShown: false,
         })}
-        component={EditProfileScreen}
+        component={EditUserNavigation}
       />
     </Stack.Navigator>
   );

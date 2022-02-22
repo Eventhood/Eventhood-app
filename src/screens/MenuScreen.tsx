@@ -1,15 +1,18 @@
 import { TouchableHighlight, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { app } from '../utils/firebase';
 import { getAuth } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 
 import SafeAreaView from '../components/SafeAreaView';
 import MenuProfileCard from '../components/MenuProfileCard';
 import MenuNavigationLink from '../components/MenuNavigationLink';
+import { app } from '../utils/firebase';
 
 const auth = getAuth(app);
 
 const ProfileScreen = ({ navigation }: any) => {
+  const [userData, setUserData] = useState<any>();
+
   const handleSignOut = async () => {
     try {
       await auth.signOut();
@@ -18,10 +21,20 @@ const ProfileScreen = ({ navigation }: any) => {
     }
   };
 
+  useEffect(() => {
+    const userDataReorder = {
+      uuid: auth.currentUser?.uid,
+      displayName: auth.currentUser?.providerData[0].displayName,
+      photoURL: auth.currentUser?.providerData[0].photoURL,
+      email: auth.currentUser?.providerData[0].email,
+    };
+    setUserData(userDataReorder);
+  }, []);
+
   return (
     <SafeAreaView>
       <ScrollView>
-        <MenuProfileCard navigation={navigation} />
+        <MenuProfileCard navigation={navigation} userData={userData} />
         <TouchableHighlight
           activeOpacity={0.5}
           underlayColor="#D1D5DB75"

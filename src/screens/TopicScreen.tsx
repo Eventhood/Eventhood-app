@@ -1,9 +1,10 @@
-import { View, TouchableHighlight, ScrollView } from 'react-native';
+import { TouchableHighlight, ScrollView } from 'react-native';
 import { Box, Center, Text } from 'native-base';
-import TopicCard from '../components/TopicCard';
-import QuestionCard from '../components/QuestionCard';
 import { useEffect, useState } from 'react';
 import { URL } from '@env';
+
+import QuestionCard from '../components/QuestionCard';
+
 interface Question {
   _id: string;
   name: string;
@@ -25,7 +26,9 @@ const TopicScreen = ({ route, navigation }: any) => {
   };
 
   useEffect(() => {
-    fetchQuestions();
+    (async () => {
+      await fetchQuestions();
+    })();
   }, []);
 
   return (

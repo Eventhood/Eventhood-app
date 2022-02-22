@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, View, ActivityIndicator } from 'react-native';
+import { StatusBar, View, ActivityIndicator } from 'react-native';
 import { registerRootComponent } from 'expo';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import BottomTab from './navigations/BottomTab';
@@ -8,6 +8,10 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from './utils/firebase';
 import AuthStack from './navigations/AuthStack';
+
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['NativeBase:']);
 
 const navTheme = DefaultTheme;
 navTheme.colors.background = '#F5F5F5';
@@ -21,20 +25,11 @@ export default registerRootComponent(function App() {
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (users) => {
       if (users) {
-        console.log('login--------', users.uid);
         setUser(users);
-
         setIsLoading(false);
-        console.log('login--------', users.uid);
       } else {
-        // User is signed out
-        // ...
-        console.log('signed out--------');
-
         setIsLoading(false);
         setUser(undefined);
-
-        console.log('signed out--------');
       }
     });
 

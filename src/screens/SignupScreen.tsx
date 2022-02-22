@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  UserCredential,
+} from 'firebase/auth';
 import { TouchableWithoutFeedback, Keyboard, Platform, StyleSheet, ScrollView } from 'react-native';
 import { Input, Icon, Text, FormControl, Image, Center, Box, HStack, Button } from 'native-base';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { URL } from '@env';
 
 import { app } from '../utils/firebase';
 import ErrorMessage from '../components/ErrorMessage';
@@ -14,7 +20,6 @@ const SignupScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [username, setUsername] = useState('');
 
   const [passwordVisibility, setPasswordVisibility] = useState(true);
@@ -22,8 +27,35 @@ const SignupScreen = ({ navigation }: any) => {
 
   const onHandleSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log('User is login', userCredential.user);
+      .then((createdUserData: UserCredential) => {
+        (async () => {
+          const bodyData = {
+            userData: {
+              uuid: createdUserData.user.uid,
+              displayName: fullName,
+              accountHandle: username,
+              photoURL: `https://ui-avatars.com/api/?name=${fullName.replace(/\s/g, '+')}`,
+              creationTime: createdUserData.user.metadata.creationTime,
+              isAdministrator: false,
+              email: createdUserData.user.email,
+            },
+          };
+
+          await fetch(`${URL}/api/users`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bodyData),
+          });
+
+          updateProfile(createdUserData.user, {
+            displayName: fullName,
+            photoURL: `https://ui-avatars.com/api/?name=${fullName.replace(/\s/g, '+')}`,
+          }).catch((error) => {
+            setSignupError(error.message);
+          });
+        })();
       })
       .catch((error) => {
         setSignupError(error.message);
@@ -65,15 +97,6 @@ const SignupScreen = ({ navigation }: any) => {
                 variant="underlined"
                 p={2}
                 placeholder="full name"
-                onChangeText={(fullName) => setFullName(fullName)}
-              />
-            </FormControl>
-            <FormControl mb={2}>
-              <FormControl.Label>Phone number</FormControl.Label>
-              <Input
-                variant="underlined"
-                p={2}
-                placeholder="+1 111 1111"
                 onChangeText={(fullName) => setFullName(fullName)}
               />
             </FormControl>

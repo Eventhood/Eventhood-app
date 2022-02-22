@@ -19,7 +19,9 @@ const HelpScreen = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    fetchTopics();
+    (async () => {
+      await fetchTopics();
+    })();
   }, []);
 
   return (
