@@ -38,7 +38,7 @@ const ProfileScreen = ({ navigation }: any) => {
         <TouchableHighlight
           activeOpacity={0.5}
           underlayColor="#D1D5DB75"
-          onPress={() => navigation.push('Profile')}
+          onPress={() => navigation.push('Profile', { id: userData.uuid })}
         >
           <MenuNavigationLink
             name="View Profile"
