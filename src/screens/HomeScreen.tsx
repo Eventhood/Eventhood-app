@@ -1,12 +1,16 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import SafeAreaView from '../components/SafeAreaView';
 import { app } from '../utils/firebase';
 import { getAuth, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import { Text, Container, Box, Heading, Slider } from 'native-base';
+
+import EventCard from '../components/EventCard';
+import SearchBar from '../components/Searchbar';
 
 const auth = getAuth(app);
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }: any) => {
   const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
@@ -15,36 +19,35 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView>
-      <Text> Hello Home screen </Text>
-      <View style={styles.row}>
-        <Text style={styles.title}>Welcome !</Text>
-      </View>
-      <Text style={styles.text}>Your UID is: {user ? user.uid : ''} </Text>
+      <ScrollView>
+        <Container>
+          <Heading padding={5}>
+            <Text fontSize="3xl" fontWeight="bold" padding={6}>
+              EVENTHOOD
+            </Text>
+          </Heading>
+        </Container>
+
+        <SearchBar navigation={navigation} />
+
+        <Box mx={5} width="80%">
+          <Slider defaultValue={15} minValue={0} maxValue={100} step={10}>
+            <Slider.Track>
+              <Slider.FilledTrack />
+            </Slider.Track>
+            <Slider.Thumb />
+          </Slider>
+        </Box>
+        <Text fontSize="xl" fontWeight="bold" padding={6}>
+          Recommended events
+        </Text>
+        <EventCard />
+        <EventCard />
+        <EventCard />
+        <EventCard />
+      </ScrollView>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#e93b81',
-    paddingTop: 50,
-    paddingHorizontal: 12,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#000000',
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: 'normal',
-    color: '#000000',
-  },
-});
+
 export default HomeScreen;
