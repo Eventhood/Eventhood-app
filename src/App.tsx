@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, View, ActivityIndicator } from 'react-native';
+import { StatusBar, View, ActivityIndicator } from 'react-native';
 import { registerRootComponent } from 'expo';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import BottomTab from './navigations/BottomTab';
@@ -26,7 +26,6 @@ export default registerRootComponent(function App() {
     const unsubscribeAuth = onAuthStateChanged(auth, (users) => {
       if (users) {
         setUser(users);
-
         setIsLoading(false);
       } else {
         setIsLoading(false);

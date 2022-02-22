@@ -8,21 +8,19 @@ const EditUserInputBox = ({
   value,
   navigation,
   route,
+  id,
 }: {
   title: string;
   value: string;
   navigation: any;
   route: string;
+  id: string;
 }) => {
   return (
     <TouchableHighlight
       activeOpacity={0.5}
       underlayColor="#D1D5DB75"
-      onPress={() =>
-        navigation.navigate(route, {
-          value,
-        })
-      }
+      onPress={() => navigation.navigate(route, { value, id })}
     >
       <Box style={styles.box}>
         <Box>

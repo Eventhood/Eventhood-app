@@ -2,7 +2,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import EditUsernameScreen from '../screens/EditUser/EditUsernameScreen';
-import EditPhoneNumberScreen from '../screens/EditUser/EditPhoneNumberScreen';
 import EditPasswordScreen from '../screens/EditUser/EditPasswordScreen';
 import EditFullnameScreen from '../screens/EditUser/EditFullnameScreen';
 import EditEmailScreen from '../screens/EditUser/EditEmailScreen';
@@ -68,19 +67,6 @@ const EditUserNavigation = ({ navigation, route }: any) => {
           headerBackImage: () => <MaterialCommunityIcons name="close" size={24} color="black" />,
         })}
         component={EditPasswordScreen}
-      />
-      <Stack.Screen
-        name="EditPhoneNumber"
-        options={() => ({
-          headerTitle: '',
-          headerStyle: {
-            backgroundColor: 'transparent',
-            elevation: 0,
-            shadowOpacity: 0,
-          },
-          headerBackImage: () => <MaterialCommunityIcons name="close" size={24} color="black" />,
-        })}
-        component={EditPhoneNumberScreen}
       />
       <Stack.Screen
         name="EditUsername"

@@ -1,23 +1,30 @@
 import { StyleSheet } from 'react-native';
 import { Avatar, Flex, Center, Text } from 'native-base';
 
-const MenuProfileCard = ({ navigation }: any) => {
+const MenuProfileCard = ({ navigation, userData }: any) => {
   return (
     <Flex style={styles.profileContainer} direction="row">
       <Avatar
         bg="gray.500"
         size="lg"
         shadow={5}
-        source={{
-          uri: 'https://cdn.donmai.us/sample/4f/24/__shinei_nouzen_86_eightysix_drawn_by_shirabi__sample-4f24cabfc060f43dfc9d782f71e852f5.jpg',
-        }}
+        source={
+          userData
+            ? userData.photoURL
+              ? { uri: userData.photoURL }
+              : require('../assets/default_profile_pic.jpg')
+            : require('../assets/default_profile_pic.jpg')
+        }
       ></Avatar>
       <Center px="5">
         <Flex direction="column">
           <Text my="1" fontWeight="bold">
-            Name
+            {userData ? userData.displayName : ''}
           </Text>
-          <Text style={styles.profileLink} onPress={() => navigation.push('EditProfile-m')}>
+          <Text
+            style={styles.profileLink}
+            onPress={() => navigation.navigate('EditProfile-m', { screen: 'EditProfile' })}
+          >
             Edit Profile
           </Text>
         </Flex>
