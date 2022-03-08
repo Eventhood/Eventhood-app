@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Text, Container, Box, Heading, Slider } from 'native-base';
 
 import EventCard from '../components/EventCard';
-import SearchBar from '../components/Searchbar';
+import SearchBar from '../components/SearchBar';
 
 const auth = getAuth(app);
 

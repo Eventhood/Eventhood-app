@@ -11,6 +11,7 @@ import LegalScreen from '../screens/LegalScreen';
 import AboutScreen from '../screens/AboutScreen';
 import HelpStackNavigation from './HelpStackNavigation';
 import EditUserNavigation from './EditUserNavigation';
+import OwnEventNavigation from './OwnEventNavigation';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ const bottomNavHiddenRoutes = [
   'Legal',
   'About',
   'EditProfile-m',
+  'YourEvent-m',
 ];
 const MenuStackNavigator = ({ navigation, route }: any) => {
   useLayoutEffect(() => {
@@ -73,12 +75,11 @@ const MenuStackNavigator = ({ navigation, route }: any) => {
         component={ViewProfileScreen}
       />
       <Stack.Screen
-        name="YourEvent"
+        name="YourEvent-m"
         options={() => ({
-          title: 'Your Event',
-          headerTitleAlign: 'center',
+          headerShown: false,
         })}
-        component={YourEventScreen}
+        component={OwnEventNavigation}
       />
       <Stack.Screen
         name="SignUpEvent"
