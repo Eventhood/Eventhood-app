@@ -24,7 +24,11 @@ const CreateEventScreen = ({ navigation }: any) => {
   const [showDate, setShowDate] = useState(false);
 
   const handleCreateEvent = async () => {
-    const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`);
+    const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
+      headers: {
+        Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+      },
+    });
     const jsonRes = await res.json();
 
     await fetch(`${URL}/api/events`, {
@@ -44,17 +48,6 @@ const CreateEventScreen = ({ navigation }: any) => {
         },
       }),
     });
-    console.log('created', {
-      eventData: {
-        host: jsonRes.data._id,
-        name: name,
-        location: location,
-        category: category,
-        maxParticipants: maxParticipants,
-        description: description,
-        startTime: date,
-      },
-    });
   };
 
   useEffect(() => {
@@ -62,15 +55,9 @@ const CreateEventScreen = ({ navigation }: any) => {
       const response = await fetch(`${URL}/api/eventcategories`);
       const jsonRes = await response.json();
 
-      // console.log(jsonRes.data);
       setCategoryList(jsonRes.data);
     })();
   }, []);
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setShow(Platform.OS === 'ios');
-  //   setDate(currentDate);
-  // };
 
   const [error, setError] = useState('');
   return (
@@ -125,8 +112,10 @@ const CreateEventScreen = ({ navigation }: any) => {
               onValueChange={(category) => setCategory(category)}
             >
               {categoryList ? (
-                categoryList.map((category_: any, key: any) => {
-                  return <Select.Item label={category_.name} value={category_._id} key={key} />;
+                categoryList.map((category_: any) => {
+                  return (
+                    <Select.Item label={category_.name} value={category_._id} key={category_._id} />
+                  );
                 })
               ) : (
                 <Select.Item label="No topic" value="No topic" key="No topic" />
@@ -214,6 +203,7 @@ const CreateEventScreen = ({ navigation }: any) => {
             <TextArea
               h={40}
               bg={'#ffffff'}
+              value={description}
               onChangeText={(text) => {
                 setDescription(text);
               }}
