@@ -51,7 +51,7 @@ const ProfileScreen = ({ navigation }: any) => {
         <TouchableHighlight
           activeOpacity={0.5}
           underlayColor="#D1D5DB75"
-          onPress={() => navigation.push('YourEvent')}
+          onPress={() => navigation.push('YourEvent-m')}
         >
           <MenuNavigationLink
             name="Your Event"
