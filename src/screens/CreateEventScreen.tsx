@@ -1,23 +1,71 @@
-import { Text, Box, TextArea, Input, Button } from 'native-base';
+import { Text, Box, TextArea, Input, Button, CheckIcon, Select } from 'native-base';
 import { StyleSheet, View, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import { getAuth } from 'firebase/auth';
 
+import { app } from '../utils/firebase';
+import { URL } from '@env';
 import ErrorMessage from '../components/ErrorMessage';
 
-const CreateEventScreen = () => {
-  const [value, setValue] = useState('');
+const auth = getAuth(app);
+
+const CreateEventScreen = ({ navigation }: any) => {
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [category, setCategory] = useState('');
-
-  const [categoryList, setCategoryList] = useState('');
+  const [maxParticipants, setMaxParticipants] = useState('');
+  const [categoryList, setCategoryList] = useState([]);
+  const [description, setDescription] = useState('');
 
   const [date, setDate] = useState(new Date());
   const [showTime, setShowTime] = useState(false);
   const [showDate, setShowDate] = useState(false);
 
+  const handleCreateEvent = async () => {
+    const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`);
+    const jsonRes = await res.json();
+
+    await fetch(`${URL}/api/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventData: {
+          host: jsonRes.data._id,
+          name: name,
+          location: location,
+          category: category,
+          maxParticipants: maxParticipants,
+          description: description,
+          startTime: date,
+        },
+      }),
+    });
+    console.log('created', {
+      eventData: {
+        host: jsonRes.data._id,
+        name: name,
+        location: location,
+        category: category,
+        maxParticipants: maxParticipants,
+        description: description,
+        startTime: date,
+      },
+    });
+  };
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${URL}/api/eventcategories`);
+      const jsonRes = await response.json();
+
+      // console.log(jsonRes.data);
+      setCategoryList(jsonRes.data);
+    })();
+  }, []);
   // const onChange = (event, selectedDate) => {
   //   const currentDate = selectedDate || date;
   //   setShow(Platform.OS === 'ios');
@@ -36,9 +84,9 @@ const CreateEventScreen = () => {
             <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
-              value={value}
+              value={name}
               onChangeText={(text) => {
-                setValue(text);
+                setName(text);
               }}
               variant="filled"
               placeholder=""
@@ -51,9 +99,9 @@ const CreateEventScreen = () => {
             <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
-              value={value}
+              value={location}
               onChangeText={(text) => {
-                setValue(text);
+                setLocation(text);
               }}
               variant="filled"
               placeholder=""
@@ -64,34 +112,26 @@ const CreateEventScreen = () => {
               Category
             </Text>
             <ErrorMessage error={error} visible={error ? true : false} />
-            <Input
-              bg={'#ffffff'}
-              value={value}
-              onChangeText={(text) => {
-                setValue(text);
-              }}
-              variant="filled"
-              placeholder=""
-            />
 
-            {/* <Select
+            <Select
               minWidth="200"
               accessibilityLabel="Choose Category"
               placeholder="Choose Category"
+              bg={'#ffffff'}
               _selectedItem={{
-                bg: 'teal.600',
+                bg: '#ffffff',
                 endIcon: <CheckIcon size={5} />,
               }}
               onValueChange={(category) => setCategory(category)}
             >
-              {topics ? (
-                topics.map((topic, key) => {
-                  return <Select.Item label={topic.name} value={topic.name} key={key} />;
+              {categoryList ? (
+                categoryList.map((category_: any, key: any) => {
+                  return <Select.Item label={category_.name} value={category_._id} key={key} />;
                 })
               ) : (
                 <Select.Item label="No topic" value="No topic" key="No topic" />
               )}
-            </Select> */}
+            </Select>
           </Box>
           <Box mt={4}>
             <Text fontSize={'lg'} mb="4">
@@ -100,9 +140,10 @@ const CreateEventScreen = () => {
             <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
-              value={value}
+              type="number"
+              value={maxParticipants}
               onChangeText={(text) => {
-                setValue(text);
+                setMaxParticipants(text);
               }}
               variant="filled"
               placeholder=""
@@ -170,9 +211,23 @@ const CreateEventScreen = () => {
               Description
             </Text>
             <ErrorMessage error={error} visible={error ? true : false} />
-            <TextArea h={40} bg={'#ffffff'} />
+            <TextArea
+              h={40}
+              bg={'#ffffff'}
+              onChangeText={(text) => {
+                setDescription(text);
+              }}
+            />
           </Box>
-          <Button style={styles.button}>Create Event</Button>
+          <Button
+            style={styles.button}
+            onPress={async () => {
+              await handleCreateEvent();
+              navigation.goBack();
+            }}
+          >
+            Create Event
+          </Button>
         </Box>
       </TouchableWithoutFeedback>
     </ScrollView>
