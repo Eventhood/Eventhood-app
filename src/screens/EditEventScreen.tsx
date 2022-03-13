@@ -1,25 +1,71 @@
-import { Text, Box, TextArea, Input, Button } from 'native-base';
+import { Text, Box, TextArea, Input, Button, Select, CheckIcon } from 'native-base';
 import { StyleSheet, View, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
 import ErrorMessage from '../components/ErrorMessage';
+import { URL } from '@env';
 
-const EditEventScreen = () => {
-  const [value, setValue] = useState('');
+const EditEventScreen = ({ navigation, route }: any) => {
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
+  const [category, setCategory] = useState('');
+  const [maxParticipants, setMaxParticipants] = useState('');
+  const [categoryList, setCategoryList] = useState([]);
+  const [description, setDescription] = useState('');
+
   const [date, setDate] = useState(new Date());
 
   const [showTime, setShowTime] = useState(false);
   const [showDate, setShowDate] = useState(false);
 
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setShow(Platform.OS === 'ios');
-  //   setDate(currentDate);
-  // };
-
   const [error, setError] = useState('');
+
+  const handleCancelEvent = async () => {
+    await fetch(`${URL}/api/events/${route.params.id}`, {
+      method: 'DELETE',
+    });
+    console.log('in handleCancelEvent');
+  };
+
+  const handleUpdateEvent = async () => {
+    await fetch(`${URL}/api/events/${route.params.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventData: {
+          name: name,
+          location: location,
+          category: category,
+          maxParticipants: maxParticipants,
+          description: description,
+          startTime: date,
+        },
+      }),
+    });
+  };
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${URL}/api/eventcategories`);
+      const jsonRes = await response.json();
+
+      setCategoryList(jsonRes.data);
+      const resEvent = await fetch(`${URL}/api/events/single/${route.params.id}`);
+      const jsonResEvent = await resEvent.json();
+
+      setName(jsonResEvent.data.name);
+      setCategory(jsonResEvent.data.category._id);
+      setMaxParticipants(jsonResEvent.data.maxParticipants.toString());
+      setDescription(jsonResEvent.data.description);
+      setLocation(jsonResEvent.data.location.address);
+      setDate(new Date(jsonResEvent.data.startTime));
+    })();
+  }, []);
+
   return (
     <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -31,9 +77,9 @@ const EditEventScreen = () => {
             <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
-              value={value}
+              value={name}
               onChangeText={(text) => {
-                setValue(text);
+                setName(text);
               }}
               variant="filled"
               placeholder=""
@@ -46,9 +92,9 @@ const EditEventScreen = () => {
             <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
-              value={value}
+              value={location}
               onChangeText={(text) => {
-                setValue(text);
+                setLocation(text);
               }}
               variant="filled"
               placeholder=""
@@ -59,15 +105,26 @@ const EditEventScreen = () => {
               Category
             </Text>
             <ErrorMessage error={error} visible={error ? true : false} />
-            <Input
+            <Select
+              selectedValue={category}
+              minWidth="200"
+              accessibilityLabel="Choose Category"
+              placeholder="Choose Category"
               bg={'#ffffff'}
-              value={value}
-              onChangeText={(text) => {
-                setValue(text);
+              _selectedItem={{
+                bg: '#ffffff',
+                endIcon: <CheckIcon size={5} />,
               }}
-              variant="filled"
-              placeholder=""
-            />
+              onValueChange={(category) => setCategory(category)}
+            >
+              {categoryList ? (
+                categoryList.map((category_: any, key: any) => {
+                  return <Select.Item label={category_.name} value={category_._id} key={key} />;
+                })
+              ) : (
+                <Select.Item label="No topic" value="No topic" key="No topic" />
+              )}
+            </Select>
           </Box>
           <Box mt={4}>
             <Text fontSize={'lg'} mb="4">
@@ -76,9 +133,10 @@ const EditEventScreen = () => {
             <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
-              value={value}
+              type="number"
+              value={maxParticipants}
               onChangeText={(text) => {
-                setValue(text);
+                setMaxParticipants(text);
               }}
               variant="filled"
               placeholder=""
@@ -146,9 +204,42 @@ const EditEventScreen = () => {
               Description
             </Text>
             <ErrorMessage error={error} visible={error ? true : false} />
-            <TextArea h={40} bg={'#ffffff'} />
+            <TextArea
+              h={40}
+              bg={'#ffffff'}
+              value={description}
+              onChangeText={(text) => {
+                setDescription(text);
+              }}
+            />
           </Box>
-          <Button style={styles.button}>Update Event</Button>
+          <Button
+            _text={{
+              fontWeight: 'semibold',
+            }}
+            style={styles.button}
+            onPress={async () => {
+              await handleUpdateEvent();
+              console.log('updated');
+              navigation.goBack();
+            }}
+          >
+            Update Event
+          </Button>
+
+          <Button
+            style={styles.buttonDelete}
+            _text={{
+              fontWeight: 'semibold',
+            }}
+            onPress={async () => {
+              await handleCancelEvent();
+              console.log('deleted');
+              navigation.goBack();
+            }}
+          >
+            Cancel Event
+          </Button>
         </Box>
       </TouchableWithoutFeedback>
     </ScrollView>
@@ -157,6 +248,11 @@ const EditEventScreen = () => {
 
 const styles = StyleSheet.create({
   button: { backgroundColor: '#000000', height: 50, marginBottom: 30, marginTop: 30 },
+  buttonDelete: {
+    backgroundColor: '#EF4444',
+    height: 50,
+    marginBottom: 30,
+  },
 });
 
 export default EditEventScreen;
