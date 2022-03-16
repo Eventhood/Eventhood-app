@@ -5,6 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import { MenuStackNavigator } from './StackNavigator';
+import HomeNavigation from './HomeNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +22,7 @@ const BottomTab = () => {
     >
       <Tab.Screen
         name="Home-b"
-        component={HomeScreen}
+        component={HomeNavigation}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (

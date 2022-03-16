@@ -41,7 +41,7 @@ const HomeScreen = ({ navigation }: any) => {
         <Text fontSize="xl" fontWeight="bold" padding={6}>
           Recommended events
         </Text>
-        <EventCard />
+        <EventCard navigation={navigation} />
         <EventCard />
         <EventCard />
         <EventCard />
