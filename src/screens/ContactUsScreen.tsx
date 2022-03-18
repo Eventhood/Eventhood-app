@@ -34,22 +34,30 @@ const ContactUsScreen = ({ navigation }: any) => {
     setCategoryError(category ? false : true);
 
     if (message && category) {
-      const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`);
+      const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+        },
+      });
       const jsonRes = await res.json();
 
-      await fetch(`${URL}/api/contactrequests	`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contactRequestData: {
-            user: jsonRes.data._id,
-            topic: category,
-            message: message,
+      try {
+        await fetch(`${URL}/api/contactrequests	`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        }),
-      });
+          body: JSON.stringify({
+            contactRequestData: {
+              user: jsonRes.data._id,
+              topic: category,
+              message: message,
+            },
+          }),
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 

@@ -12,6 +12,7 @@ import AboutScreen from '../screens/AboutScreen';
 import HelpStackNavigation from './HelpStackNavigation';
 import EditUserNavigation from './EditUserNavigation';
 import OwnEventNavigation from './OwnEventNavigation';
+import ViewProfileNavigation from './ViewProfileNavigation';
 
 const Stack = createStackNavigator();
 
@@ -68,11 +69,12 @@ const MenuStackNavigator = ({ navigation, route }: any) => {
         component={MenuScreen}
       />
       <Stack.Screen
-        name="Profile"
+        name="Profile-m"
         options={() => ({
+          headerShown: false,
           headerTitleAlign: 'center',
         })}
-        component={ViewProfileScreen}
+        component={ViewProfileNavigation}
       />
       <Stack.Screen
         name="YourEvent-m"
