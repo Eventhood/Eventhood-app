@@ -26,7 +26,6 @@ const HomeScreen = ({ navigation }: any) => {
 
         setEventList(jsonRes.data);
 
-        console.log(jsonRes);
       } catch (e) {
         console.log('error on fetch post');
       }
