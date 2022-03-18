@@ -51,83 +51,79 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
           30km
         </Text>
       </View>
-      <Center>
-        <View style={{ flexDirection: 'row' }}>
-          <View>
-            <Text
-              style={{
-                right: 22,
-                top: 110,
-              }}
-              fontSize="4xl"
-              fontWeight="semibold"
-            >
-              Title {route.params.id}
-            </Text>
-          </View>
-          <View style={styles.buttonStyle}>
-            <Button
-              style={styles.register}
-              shadow={4}
-              _text={{
-                color: '#3B82F6',
-              }}
-            >
-              Register
-            </Button>
-          </View>
+
+      <View style={{ left: 10, flexDirection: 'row' }}>
+        <View>
+          <Text
+            style={{
+              top: 110,
+              paddingLeft: 2,
+            }}
+            fontSize="2xl"
+            fontWeight="semibold"
+          >
+            Title{route.params.id}
+          </Text>
         </View>
-      </Center>
+        <View style={styles.btn}>
+          <Button
+            style={styles.register}
+            shadow={4}
+            _text={{
+              color: '#3B82F6',
+              paddingRight: 3,
+            }}
+          >
+            Register
+          </Button>
+        </View>
+      </View>
+
       <Text
         style={{
-          right: 10,
-          top: 50,
+          left: 2,
+          top: 120,
         }}
         marginLeft={10}
       >
         Created By:
       </Text>
-      <Center>
-        <View style={{ flexDirection: 'row' }}>
-          <View
-            style={{
-              position: 'absolute',
-              right: 10,
-              top: 55,
+      <View style={{ left: 10, flexDirection: 'row' }}>
+        <View style={{ top: 130, flexDirection: 'row' }}>
+          <Avatar
+            style={{}}
+            source={{
+              uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
             }}
           >
-            <View style={{ flexDirection: 'row' }}>
-              <Avatar
-                size="lg"
-                source={{
-                  uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                }}
-              >
-                AK
-              </Avatar>
-              <View>
-                <Text marginLeft={2} marginTop={3} fontSize="xl" fontWeight="light">
-                  @Username
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View>
-            <Button
-              style={styles.follow}
-              shadow={4}
-              _text={{
-                color: '#3B82F6',
-              }}
-            >
-              Follow
-            </Button>
-          </View>
+            AK
+          </Avatar>
+
+          <Text
+            style={{
+              top: 11,
+              paddingLeft: 2,
+            }}
+            fontSize="lg"
+          >
+            @Username
+          </Text>
         </View>
-      </Center>
+        <View style={styles.btn2}>
+          <Button
+            style={styles.follow}
+            shadow={4}
+            _text={{
+              color: '#3B82F6',
+            }}
+          >
+            Follow
+          </Button>
+        </View>
+      </View>
       <View
         style={{
-          top: 130,
+          top: 150,
         }}
       >
         <View>
@@ -173,13 +169,19 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
 export default DisplayEventScreen;
 
 const styles = StyleSheet.create({
-  buttonStyle: {
-    marginHorizontal: 100,
-    marginTop: 110,
-  },
-  register: {
+  btn: {
+    paddingRight: 2,
     position: 'absolute',
-    top: 10,
+    right: 150,
+  },
+
+  btn2: { paddingRight: 2, position: 'absolute', right: 220 },
+
+  register: {
+    paddingRight: 2,
+    position: 'absolute',
+
+    top: 110,
     width: 125,
     height: 40,
     borderRadius: 30,
@@ -187,13 +189,12 @@ const styles = StyleSheet.create({
     borderColor: '#3B82F6',
     borderWidth: 2,
   },
-  user: {},
 
   follow: {
+    paddingRight: 10,
     position: 'absolute',
-
     left: 70,
-    top: 70,
+    top: 140,
     width: 100,
     height: 36,
     borderRadius: 30,
