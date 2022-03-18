@@ -9,8 +9,9 @@ import { app } from '../utils/firebase';
 
 const auth = getAuth(app);
 
-const ViewProfileScreen = ({ route }: any) => {
+const ViewProfileScreen = ({ route, navigation }: any) => {
   const [profile, setProfile] = useState<any>();
+  const [eventList, setEventList] = useState([]);
 
   const fetchProfile = async () => {
     const response = await fetch(`${URL}/api/users/${route.params.id}`, {
@@ -20,11 +21,19 @@ const ViewProfileScreen = ({ route }: any) => {
     });
     const json = await response.json();
     setProfile(json.data);
+
+    const resEvent = await fetch(`${URL}/api/events/user/${json.data._id}`);
+    const jsonResEvent = await resEvent.json();
+    setEventList(jsonResEvent.data);
   };
 
   useEffect(() => {
     (async () => {
-      await fetchProfile();
+      try {
+        await fetchProfile();
+      } catch (e) {
+        console.log(e);
+      }
     })();
   }, []);
 
@@ -84,9 +93,21 @@ const ViewProfileScreen = ({ route }: any) => {
           Upcoming events
         </Text>
       </Container>
-      <EventCard />
-      <EventCard />
-      <EventCard />
+      {eventList ? (
+        eventList.length > 0 ? (
+          eventList.map((event, key) => {
+            return <EventCard navigation={navigation} eventInfo={event} key={key}></EventCard>;
+          })
+        ) : (
+          <Center>
+            <Text fontSize="lg">No Event</Text>
+          </Center>
+        )
+      ) : (
+        <Center>
+          <Text fontSize="lg">No Event</Text>
+        </Center>
+      )}
     </ScrollView>
   );
 };
