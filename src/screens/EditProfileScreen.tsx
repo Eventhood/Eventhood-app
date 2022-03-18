@@ -31,10 +31,15 @@ const EditProfileScreen = ({ navigation }: any) => {
   //     setImage(result.uri);
   //   }
   // };
+
   const isFocused = useIsFocused();
 
   const getUserInfo = async () => {
-    const response = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`);
+    const response = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
+      headers: {
+        Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+      },
+    });
     const json = await response.json();
     setUserBasicInfo(json.data);
   };
@@ -49,6 +54,10 @@ const EditProfileScreen = ({ navigation }: any) => {
     (async () => {
       await getUserInfo();
     })();
+
+    return () => {
+      setUserInfo({});
+    };
   }, [isFocused]);
 
   return (

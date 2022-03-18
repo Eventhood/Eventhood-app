@@ -100,7 +100,7 @@ const SignupScreen = ({ navigation }: any) => {
                 variant="underlined"
                 p={2}
                 placeholder="example@domain.com"
-                onChangeText={(email) => setEmail(email)}
+                onChangeText={(email) => setEmail(email.trim())}
               />
             </FormControl>
             <FormControl mb={2}>

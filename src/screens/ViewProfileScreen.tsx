@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, Center, Button, Container, Avatar } from 'native-base';
 import { URL } from '@env';
+import { getAuth } from 'firebase/auth';
 
 import EventCard from '../components/EventCard';
+import { app } from '../utils/firebase';
+
+const auth = getAuth(app);
 
 const ViewProfileScreen = ({ route }: any) => {
   const [profile, setProfile] = useState<any>();
 
   const fetchProfile = async () => {
-    const response = await fetch(`${URL}/api/users/${route.params.id}`);
+    const response = await fetch(`${URL}/api/users/${route.params.id}`, {
+      headers: {
+        Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+      },
+    });
     const json = await response.json();
     setProfile(json.data);
   };
