@@ -1,7 +1,7 @@
 import { Text, Box, Stack, Heading, Image, AspectRatio, HStack } from 'native-base';
 import { TouchableHighlight } from 'react-native';
 
-const EventCard = ({ navigation }: any) => {
+const EventCard = ({ navigation, eventInfo }: any) => {
   return (
     <TouchableHighlight
       activeOpacity={0.5}
@@ -12,7 +12,7 @@ const EventCard = ({ navigation }: any) => {
         <Image
           roundedTop="lg"
           source={{
-            uri: 'https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=maxhttps://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max',
+            uri: eventInfo.category.header,
           }}
           alt="image"
           width="full"
@@ -22,7 +22,7 @@ const EventCard = ({ navigation }: any) => {
           <Stack space={10}>
             <HStack alignItems="center" space={4} justifyContent="space-between">
               <HStack alignItems="center">
-                <Heading size="md">eventInfo.name</Heading>
+                <Heading size="md">{eventInfo.name}</Heading>
               </HStack>
               <HStack alignItems="center">
                 <Text ml={1} color="gray.500" fontWeight="500">
@@ -31,16 +31,16 @@ const EventCard = ({ navigation }: any) => {
               </HStack>
             </HStack>
           </Stack>
-          <Text>eventInfo.description</Text>
+          <Text>{eventInfo.description}</Text>
           <HStack alignItems="center" space={4} justifyContent="space-between">
             <HStack alignItems="center">
               <Text ml={1} color="gray.500" fontWeight="500">
-                Created by @ev
+                Created by @{eventInfo.host.accountHandle}
               </Text>
             </HStack>
             <HStack alignItems="center">
               <Text ml={1} color="gray.500" fontWeight="500">
-                Max Participants 1
+                Max Participants {eventInfo.maxParticipants}
               </Text>
             </HStack>
           </HStack>
