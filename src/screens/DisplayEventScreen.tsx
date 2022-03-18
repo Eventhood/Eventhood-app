@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { TouchableHighlight } from 'react-native';
 import { Text, Center, Button, Avatar, Image } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-//test 2
+import moment from 'moment';
+
+import { URL } from '@env';
+
 const DisplayEventScreen = ({ navigation, route }: any) => {
+  const [event, setEvent] = useState<any>(undefined);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${URL}/api/events/single/${route.params.id}`);
+        const jsonRes = await res.json();
+
+        // console.log(jsonRes);
+        setEvent(jsonRes.data);
+      } catch (e) {
+        console.log('error on fetch post');
+      }
+    })();
+    console.log(route.params.id);
+  }, []);
   return (
     <ScrollView>
       <View
@@ -16,9 +35,7 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
         }}
       >
         <Image
-          source={{
-            uri: 'https://media.istockphoto.com/vectors/realistic-mountains-landscape-morning-wood-panorama-pine-trees-and-vector-id1150481340?k=20&m=1150481340&s=612x612&w=0&h=y_RdS4lPY2p7O_bh1ZhaeLLOOuSLNBaHZFMdmgdQaVE=',
-          }}
+          source={event ? { uri: event.category.header } : require('../assets/logo.png')}
           style={{
             width: '100%',
             height: 300,
@@ -62,7 +79,7 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
             fontSize="2xl"
             fontWeight="semibold"
           >
-            Title{route.params.id}
+            {event ? event.name : 'Event name'}
           </Text>
         </View>
         <View style={styles.btn}>
@@ -106,7 +123,7 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
             }}
             fontSize="lg"
           >
-            @Username
+            @{event ? event.host.accountHandle : 'Username'}
           </Text>
         </View>
         <View style={styles.btn2}>
@@ -131,23 +148,26 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
             Description:
           </Text>
           <Text marginLeft={5} marginRight={5} fontSize="sm" fontWeight="light">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tortor nisi,
-            faucibus quis neque a, congue placerat lectus. Maecenas elementum molestie elit, ac
-            iaculis metus volutpat sed. Sed feugiat accumsan tempor.
+            {event ? event.description : ''}
           </Text>
         </View>
         <View>
           <Text marginLeft={5} marginTop={5} fontSize="sm" fontWeight="medium">
-            Category: Hangout
+            Category: {event ? event.category.name : ''}
           </Text>
           <Text marginLeft={5} marginRight={5} marginTop={2} fontSize="sm" fontWeight="medium">
-            Date: November 02, 2021 at 11:30 am
+            Date:
+            {event
+              ? ` ${moment(event.startTime).format('DD MMMM YYYY')} at ${moment(
+                  event.startTime
+                ).format('hh:mm A')}`
+              : ''}
           </Text>
         </View>
 
         <View style={{ flexDirection: 'row' }}>
           <Text marginLeft={5} marginRight={5} marginTop={2} fontSize="sm" fontWeight="medium">
-            Max Partipants: 8
+            Max Partipants: {event ? event.maxParticipants : ''}
           </Text>
           <View>
             <Ionicons style={styles.max} name="people-sharp" size={15} />
@@ -158,7 +178,7 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
             Location:
           </Text>
           <Text marginLeft={8} fontSize="sm" fontWeight="light">
-            1750 Finch Ave E, North York, ON M2J 2XS
+            {event ? event.location.address : ''}
           </Text>
         </View>
       </View>

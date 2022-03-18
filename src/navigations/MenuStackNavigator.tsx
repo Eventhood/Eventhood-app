@@ -24,8 +24,9 @@ const screenOptionStyle = {
     backgroundColor: '#F9FAFB',
   },
 };
+
 const bottomNavHiddenRoutes = [
-  'Profile',
+  'Profile-m',
   'YourEvent',
   'SignUpEvent',
   'Following',
@@ -35,6 +36,7 @@ const bottomNavHiddenRoutes = [
   'EditProfile-m',
   'YourEvent-m',
 ];
+
 const MenuStackNavigator = ({ navigation, route }: any) => {
   useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route) || '';

@@ -6,7 +6,7 @@ const EventCard = ({ navigation, eventInfo }: any) => {
     <TouchableHighlight
       activeOpacity={0.5}
       underlayColor="#D1D5DB75"
-      onPress={() => navigation.navigate('EventDetail', { id: 'MyID' })}
+      onPress={() => navigation.navigate('EventDetail', { id: eventInfo._id })}
     >
       <Box padding={6}>
         <Image
