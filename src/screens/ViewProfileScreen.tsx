@@ -68,6 +68,7 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
               _text={{
                 color: '#3B82F6',
               }}
+              onPress={() => navigation.navigate('RatingScreen')}
             >
               5.1
             </Button>

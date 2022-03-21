@@ -5,7 +5,8 @@ const Stack = createStackNavigator();
 import HomeScreen from '../screens/HomeScreen';
 import DisplayEventScreen from '../screens/DisplayEventScreen';
 import ReportEventScreen from '../screens/ReportEventScreen';
-
+import RatingScreen from '../screens/RatingScreen';
+import RatingScrollScreen from '../screens/RatingScrollScreen';
 const screenOptionStyle = {
   tabBarShowLabel: false,
   headerShown: true,
@@ -48,6 +49,30 @@ const HomeNavigation = ({ navigation, route }: any) => {
           },
         })}
         component={ReportEventScreen}
+      />
+      <Stack.Screen
+        name="RatingScreen"
+        options={() => ({
+          headerTitle: 'Users Ratings',
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        })}
+        component={RatingScreen}
+      />
+      <Stack.Screen
+        name="RatingScrollScreen"
+        options={() => ({
+          headerTitle: 'New Rating',
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        })}
+        component={RatingScrollScreen}
       />
     </Stack.Navigator>
   );
