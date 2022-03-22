@@ -1,251 +1,215 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { TouchableHighlight } from 'react-native';
-import { Text, Center, Button, Avatar, Image } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Platform,
+  StatusBar,
+  TouchableHighlight,
+} from 'react-native';
+import { Text, Center, Button, Avatar, Image, Box, HStack } from 'native-base';
 import moment from 'moment';
-
+import { Ionicons } from '@expo/vector-icons';
+import SafeAreaView from '../components/SafeAreaView';
 import { URL } from '@env';
 
 const DisplayEventScreen = ({ navigation, route }: any) => {
   const [event, setEvent] = useState<any>(undefined);
-
+  const [mapUrl, setMapUrl] = useState('');
   useEffect(() => {
     (async () => {
       try {
         const res = await fetch(`${URL}/api/events/single/${route.params.id}`);
         const jsonRes = await res.json();
 
-        // console.log(jsonRes);
         setEvent(jsonRes.data);
+        setMapUrl(
+          `https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-m-marker+285A98(${jsonRes.data.location.lon},${jsonRes.data.location.lat})/${jsonRes.data.location.lon},${jsonRes.data.location.lat},14,0/600x300@2x?access_token=pk.eyJ1IjoicGFuZGFub3giLCJhIjoiY2wxMTRsNDd5MmZmdjNsbXV2azk4Ym5vaCJ9.b8tYS-wkMhA64ldIcqnRLw&attribution=false&logo=false`
+        );
       } catch (e) {
         console.log('error on fetch post');
       }
     })();
-    console.log(route.params.id);
   }, []);
+
   return (
-    <ScrollView>
-      <View
-        style={{
-          flex: 1,
-          height: 120,
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}
-      >
-        <Image
-          source={event ? { uri: event.category.header } : require('../assets/logo.png')}
-          style={{
-            width: '100%',
-            height: 300,
-            resizeMode: 'cover',
-          }}
-          alt="Event Picture"
-        />
-      </View>
-      <TouchableHighlight
-        activeOpacity={0.5}
-        underlayColor="#D1D5DB75"
-        style={{
-          position: 'absolute',
-          right: 5,
-          top: 5,
-        }}
-        onPress={() => navigation.navigate('ReportEvent')}
-      >
-        <Ionicons name="flag" size={35} />
-      </TouchableHighlight>
-      <View>
-        <Text
-          style={{
-            position: 'absolute',
-            color: 'white',
-            right: 10,
-            top: 55,
-          }}
-        >
-          30km
-        </Text>
-      </View>
+    <SafeAreaView style={styles.AndroidSafeArea}>
+      <ScrollView>
+        <Box>
+          <Image
+            source={event ? { uri: event.category.header } : require('../assets/logo.png')}
+            alt="image"
+            width="full"
+            height={200}
+          />
 
-      <View style={{ left: 10, flexDirection: 'row' }}>
-        <View>
-          <Text
-            style={{
-              top: 110,
-              paddingLeft: 2,
-            }}
-            fontSize="2xl"
-            fontWeight="semibold"
-          >
-            {event ? event.name : 'Event name'}
-          </Text>
-        </View>
-        <View style={styles.btn}>
-          <Button
-            style={styles.register}
-            shadow={4}
-            _text={{
-              color: '#3B82F6',
-              paddingRight: 3,
-            }}
-          >
-            Register
-          </Button>
-        </View>
-      </View>
-
-      <Text
-        style={{
-          left: 2,
-          top: 120,
-        }}
-        marginLeft={10}
-      >
-        Created By:
-      </Text>
-      <View style={{ left: 10, flexDirection: 'row' }}>
-        <View style={{ top: 130, flexDirection: 'row' }}>
-          <Avatar
-            style={{}}
-            source={{
-              uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-            }}
-          >
-            AK
-          </Avatar>
-
-          <Text
-            style={{
-              top: 11,
-              paddingLeft: 2,
-            }}
-            fontSize="lg"
-          >
-            @{event ? event.host.accountHandle : 'Username'}
-          </Text>
-        </View>
-        <View style={styles.btn2}>
-          <Button
-            style={styles.follow}
-            shadow={4}
-            _text={{
-              color: '#3B82F6',
-            }}
-          >
-            Follow
-          </Button>
-        </View>
-      </View>
-      <View
-        style={{
-          top: 150,
-        }}
-      >
-        <View>
-          <Text marginLeft={5} marginTop={3} fontSize="sm" fontWeight="light">
-            Description:
-          </Text>
-          <Text marginLeft={5} marginRight={5} fontSize="sm" fontWeight="light">
-            {event ? event.description : ''}
-          </Text>
-        </View>
-        <View>
-          <Text marginLeft={5} marginTop={5} fontSize="sm" fontWeight="medium">
-            Category: {event ? event.category.name : ''}
-          </Text>
-          <Text marginLeft={5} marginRight={5} marginTop={2} fontSize="sm" fontWeight="medium">
-            Date:
-            {event
-              ? ` ${moment(event.startTime).format('DD MMMM YYYY')} at ${moment(
-                  event.startTime
-                ).format('hh:mm A')}`
-              : ''}
-          </Text>
-        </View>
-
-        <View style={{ flexDirection: 'row' }}>
-          <Text marginLeft={5} marginRight={5} marginTop={2} fontSize="sm" fontWeight="medium">
-            Max Partipants: {event ? event.maxParticipants : ''}
-          </Text>
-          <View>
-            <Ionicons style={styles.max} name="people-sharp" size={15} />
+          <View style={styles.darkness}>
+            <Box style={styles.imageHeaderNavigation}>
+              <Ionicons
+                name="chevron-back-circle-outline"
+                size={28}
+                color="white"
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              />
+              <TouchableHighlight
+                activeOpacity={0.5}
+                underlayColor="#D1D5DB75"
+                style={{
+                  position: 'absolute',
+                  right: 5,
+                  top: 5,
+                }}
+                onPress={() => navigation.navigate('ReportEvent')}
+              >
+                <Ionicons name="flag" size={28} color="white" />
+              </TouchableHighlight>
+            </Box>
+            <Box style={styles.rangeBadgeBox}>
+              <Text style={styles.rangeBadge}>30km</Text>
+            </Box>
           </View>
-        </View>
-        <View>
-          <Text marginLeft={5} marginTop={5} fontSize="sm" fontWeight="medium">
-            Location:
-          </Text>
-          <Text marginLeft={8} fontSize="sm" fontWeight="light">
-            {event ? event.location.address : ''}
-          </Text>
-        </View>
-      </View>
-    </ScrollView>
+        </Box>
+        <Box p={4}>
+          <HStack justifyContent="space-between">
+            <Text style={{ flex: 1 }} fontSize="xl" fontWeight="semibold">
+              {event ? event.name : 'Event name'}
+            </Text>
+            <Center>
+              <Button
+                style={styles.registerButton}
+                shadow={4}
+                _text={{
+                  color: '#3B82F6',
+                }}
+              >
+                Register
+              </Button>
+            </Center>
+          </HStack>
+          <Box>
+            <Text>Created by:</Text>
+            <Box>
+              <HStack pt={2} style={styles.avatarBox}>
+                <Avatar
+                  source={event ? { uri: event.host.photoURL } : require('../assets/logo.png')}
+                >
+                  AK
+                </Avatar>
+                <Text ml={4}>@{event ? event.host.accountHandle : 'Username'}</Text>
+              </HStack>
+            </Box>
+          </Box>
+
+          <Box mt={4}>
+            <Text fontSize="lg" fontWeight="semibold">
+              Description:
+            </Text>
+            <Text>{event ? event.description : ''}</Text>
+
+            <Text mt={4}>
+              <Text fontSize="lg" fontWeight="semibold">
+                Category:
+              </Text>{' '}
+              {event ? event.category.name : ''}
+            </Text>
+
+            <Text mt={4}>
+              <Text fontSize="lg" fontWeight="semibold">
+                Date:
+              </Text>{' '}
+              {event
+                ? `${moment(event.startTime).format('DD MMMM YYYY')} at ${moment(
+                    event.startTime
+                  ).format('hh:mm A')}`
+                : ''}
+            </Text>
+
+            <Text mt={4}>
+              <Text fontSize="lg" fontWeight="semibold">
+                Max participant:
+              </Text>{' '}
+              {event ? event.maxParticipants : ''} <Ionicons name="people-sharp" size={15} />
+            </Text>
+
+            <Text fontSize="lg" fontWeight="semibold" mt={4}>
+              Location:
+            </Text>
+            <Text>{event ? event.location.address : ''}</Text>
+            <Image
+              source={
+                mapUrl
+                  ? {
+                      uri: mapUrl,
+                    }
+                  : require('../assets/logo.png')
+              }
+              alt="map"
+              width="full"
+              height={200}
+              mb={4}
+              mt={4}
+            />
+          </Box>
+        </Box>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 export default DisplayEventScreen;
 
 const styles = StyleSheet.create({
-  btn: {
-    paddingRight: 2,
-    position: 'absolute',
-    right: 150,
+  AndroidSafeArea: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    flex: 1,
   },
-
-  btn2: { paddingRight: 2, position: 'absolute', right: 220 },
-
-  register: {
-    paddingRight: 2,
+  darkness: {
     position: 'absolute',
-
-    top: 110,
-    width: 125,
-    height: 40,
-    borderRadius: 30,
-    backgroundColor: '#ffffff',
-    borderColor: '#3B82F6',
-    borderWidth: 2,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%',
+    height: 200,
+    justifyContent: 'space-between',
   },
-
-  follow: {
-    paddingRight: 10,
-    position: 'absolute',
-    left: 70,
-    top: 140,
-    width: 100,
-    height: 36,
-    borderRadius: 30,
-    backgroundColor: '#ffffff',
-    borderColor: '#3B82F6',
-    borderWidth: 2,
-  },
-  max: {
-    margin: 5,
-    position: 'absolute',
-    top: 6,
-    left: 2,
-    width: 15,
-    height: 15,
-  },
-  innerText: {
+  rangeBadge: {
+    padding: 10,
+    position: 'relative',
     color: 'white',
-    fontSize: 15,
-    left: 6,
   },
-  imageText: {
-    color: 'white',
-    justifyContent: 'center',
-    alignContent: 'center',
-    fontWeight: 'bold',
-    position: 'absolute',
-    borderRadius: 30,
-    top: 170,
-    left: 360,
-    right: 10,
-    bottom: 470,
-    backgroundColor: 'black',
+  rangeBadgeBox: {
+    alignItems: 'flex-end',
+    display: 'flex',
+  },
+  imageHeaderNavigation: {
+    padding: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  titleHeaderBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  registerButton: {
+    marginLeft: 8,
+    marginRight: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 25,
+    borderColor: '#3B82F6',
+    borderWidth: 1,
+  },
+  followButton: {
+    marginLeft: 8,
+    marginRight: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 25,
+    borderColor: '#3B82F6',
+    borderWidth: 1,
+    width: '50%',
+  },
+  avatarBox: {
+    width: '85%',
+    alignItems: 'center',
   },
 });

@@ -56,12 +56,7 @@ const HomeNavigation = ({ navigation, route }: any) => {
       <Stack.Screen
         name="EventDetail"
         options={() => ({
-          headerTitle: '',
-          headerStyle: {
-            backgroundColor: 'transparent',
-            elevation: 0,
-            shadowOpacity: 0,
-          },
+          headerShown: false,
         })}
         component={DisplayEventScreen}
       />
