@@ -8,7 +8,7 @@ const RatingScreen = ({ navigation }: any) => {
       <ScrollView>
         <View>
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={6}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -25,7 +25,7 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -36,7 +36,7 @@ const RatingScreen = ({ navigation }: any) => {
             </Stack>
           </Box>
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -53,36 +53,7 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -94,7 +65,7 @@ const RatingScreen = ({ navigation }: any) => {
           </Box>
 
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -111,7 +82,7 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -123,7 +94,7 @@ const RatingScreen = ({ navigation }: any) => {
           </Box>
 
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -140,7 +111,7 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -152,7 +123,7 @@ const RatingScreen = ({ navigation }: any) => {
           </Box>
 
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -169,7 +140,36 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
+              <Stack backgroundColor="white" alignItems="center">
+                <HStack>
+                  <Text fontSize="lg" color="black" fontWeight="500">
+                    +5 Rating
+                  </Text>
+                </HStack>
+              </Stack>
+            </Stack>
+          </Box>
+
+          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
+              <Stack space={10}>
+                <HStack>
+                  <Avatar
+                    size="sm"
+                    source={{
+                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
+                    }}
+                  >
+                    AK
+                  </Avatar>
+                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
+                    @username
+                  </Text>
+                </HStack>
+              </Stack>
+            </Stack>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -180,7 +180,7 @@ const RatingScreen = ({ navigation }: any) => {
             </Stack>
           </Box>
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -197,7 +197,7 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -208,7 +208,7 @@ const RatingScreen = ({ navigation }: any) => {
             </Stack>
           </Box>
           <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2} borderWidth={1}>
+            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
               <Stack space={10}>
                 <HStack>
                   <Avatar
@@ -225,7 +225,7 @@ const RatingScreen = ({ navigation }: any) => {
                 </HStack>
               </Stack>
             </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2} borderWidth={1}>
+            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
               <Stack backgroundColor="white" alignItems="center">
                 <HStack>
                   <Text fontSize="lg" color="black" fontWeight="500">
@@ -248,7 +248,6 @@ export default RatingScreen;
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    borderWidth: 1,
     backgroundColor: 'white',
     width: 66,
     height: 66,
