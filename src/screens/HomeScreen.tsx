@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import SafeAreaView from '../components/SafeAreaView';
 import { app } from '../utils/firebase';
 import { getAuth, User } from 'firebase/auth';
@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Text, Container, Box, Heading, Slider } from 'native-base';
 import { URL } from '@env';
 import { useIsFocused } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 import EventCard from '../components/EventCard';
 import SearchBar from '../components/SearchBar';
@@ -14,9 +15,10 @@ const auth = getAuth(app);
 
 const HomeScreen = ({ navigation }: any) => {
   const [user, setUser] = useState<User | null>();
+  const [location, setLocation] = useState<any>();
   const isFocused = useIsFocused();
-
   const [eventList, setEventList] = useState([]);
+
   useEffect(() => {
     setUser(auth.currentUser);
     (async () => {
@@ -25,10 +27,22 @@ const HomeScreen = ({ navigation }: any) => {
         const jsonRes = await res.json();
 
         setEventList(jsonRes.data);
-
       } catch (e) {
         console.log('error on fetch post');
       }
+    })();
+  }, [isFocused]);
+
+  useEffect(() => {
+    (async () => {
+      let locationInfo = await Location.requestForegroundPermissionsAsync();
+
+      while (locationInfo.status !== 'granted') {
+        locationInfo = await Location.requestForegroundPermissionsAsync();
+      }
+
+      let locations = await Location.getCurrentPositionAsync({});
+      setLocation(locations);
     })();
   }, [isFocused]);
 
@@ -58,7 +72,14 @@ const HomeScreen = ({ navigation }: any) => {
         </Text>
         {eventList.length
           ? eventList.map((event: any, key) => {
-              return <EventCard navigation={navigation} key={key} eventInfo={event} />;
+              return (
+                <EventCard
+                  navigation={navigation}
+                  key={key}
+                  eventInfo={event}
+                  location={location}
+                />
+              );
             })
           : null}
       </ScrollView>

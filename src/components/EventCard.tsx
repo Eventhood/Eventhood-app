@@ -1,7 +1,8 @@
 import { Text, Box, Stack, Heading, Image, AspectRatio, HStack } from 'native-base';
 import { TouchableHighlight } from 'react-native';
+import { distance } from '../utils/location';
 
-const EventCard = ({ navigation, eventInfo }: any) => {
+const EventCard = ({ navigation, eventInfo, location }: any) => {
   return (
     <TouchableHighlight
       activeOpacity={0.5}
@@ -26,7 +27,14 @@ const EventCard = ({ navigation, eventInfo }: any) => {
               </HStack>
               <HStack alignItems="center">
                 <Text ml={1} color="gray.500" fontWeight="500">
-                  20 Km
+                  {location
+                    ? `${distance(
+                        eventInfo.location.lat,
+                        location.coords.latitude,
+                        eventInfo.location.lon,
+                        location.coords.longitude
+                      )} Km`
+                    : null}
                 </Text>
               </HStack>
             </HStack>

@@ -1,245 +1,72 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { Text, Box, Center, Heading, HStack, Stack, Avatar, Button } from 'native-base';
+import { Text, Fab, Icon, Center, HStack, Stack, Avatar } from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 
-const RatingScreen = ({ navigation }: any) => {
+import { app } from '../utils/firebase';
+import { URL } from '@env';
+import RatingCard from '../components/RatingCard';
+
+const auth = getAuth(app);
+
+const RatingScreen = ({ route, navigation }: any) => {
+  const isFocused = useIsFocused();
+  const [profile, setProfile] = useState<any>();
+  const [ratingList, setRatingList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
+          headers: {
+            Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+          },
+        });
+        const jsonRes = await res.json();
+        setProfile(jsonRes.data);
+
+        const resRating = await fetch(`${URL}/api/ratings/${route.params.host._id}`);
+        const jsonResRating = await resRating.json();
+        setRatingList(jsonResRating.data);
+        console.log(jsonResRating.data);
+      } catch (e) {
+        console.log('Services Unavailable');
+      }
+    })();
+  }, [isFocused]);
+
   return (
-    <View>
+    <View style={styles.view}>
       <ScrollView>
         <View>
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={6}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-          <Box paddingLeft={10} paddingRight={10} paddingBottom={6} paddingTop={2}>
-            <Stack p={2} borderTopRadius={30} backgroundColor="black" space={2}>
-              <Stack space={10}>
-                <HStack>
-                  <Avatar
-                    size="sm"
-                    source={{
-                      uri: 'https://pbs.twimg.com/profile_images/1309797238651060226/18cm6VhQ_400x400.jpg',
-                    }}
-                  >
-                    AK
-                  </Avatar>
-                  <Text ml={1} alignItems="center" color="white" fontSize="xl" fontWeight="500">
-                    @username
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-            <Stack p={2} borderBottomRadius={30} backgroundColor="white" space={2}>
-              <Stack backgroundColor="white" alignItems="center">
-                <HStack>
-                  <Text fontSize="lg" color="black" fontWeight="500">
-                    +5 Rating
-                  </Text>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
+          {ratingList.length !== 0 ? (
+            ratingList.map((rating, key) => {
+              return <RatingCard ratingInfo={rating} key={key} />;
+            })
+          ) : (
+            <Center>
+              <Text fontSize="lg">No Rating</Text>
+            </Center>
+          )}
         </View>
-      </ScrollView> 
-      <Button  onPress={() => navigation.navigate('RatingScrollScreen')} style={styles.buttonStyle}>
-        <Text style={styles.buttonTextStyle}>+</Text>
-      </Button>
+      </ScrollView>
+      {profile ? (
+        profile._id !== route.params.host._id ? (
+          <Fab
+            renderInPortal={false}
+            shadow={2}
+            size="sm"
+            bg={'#ffffff'}
+            icon={<Icon color="black" as={AntDesign} name="plus" size="sm" />}
+            onPress={() => {
+              navigation.navigate('RateUser', { host: route.params.host, profile: profile });
+            }}
+          />
+        ) : null
+      ) : null}
     </View>
   );
 };
@@ -247,18 +74,8 @@ const RatingScreen = ({ navigation }: any) => {
 export default RatingScreen;
 
 const styles = StyleSheet.create({
-  buttonStyle: {
-    backgroundColor: 'white',
-    width: 66,
-    height: 66,
-    borderRadius: 33,
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-  },
-  buttonTextStyle: {
-    color: 'black',
-    fontSize: 25,
-    marginTop: 7,
+  view: {
+    display: 'flex',
+    flex: 1,
   },
 });

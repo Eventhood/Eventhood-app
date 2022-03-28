@@ -2,36 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, Center, Button, Container, Avatar } from 'native-base';
 import { URL } from '@env';
-import { getAuth } from 'firebase/auth';
 import * as Location from 'expo-location';
 import { useIsFocused } from '@react-navigation/native';
 
 import EventCard from '../components/EventCard';
-import { app } from '../utils/firebase';
-
-const auth = getAuth(app);
 
 const ViewProfileScreen = ({ route, navigation }: any) => {
   const [profile, setProfile] = useState<any>();
   const [eventList, setEventList] = useState([]);
-  const isFocused = useIsFocused();
-  const [location, setLocation] = useState<any>();
   const [ratingTotal, setRatingTotal] = useState(0);
+  const [location, setLocation] = useState<any>();
+  const isFocused = useIsFocused();
 
   const fetchProfile = async () => {
-    const response = await fetch(`${URL}/api/users/${route.params.id}`, {
-      headers: {
-        Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
-      },
-    });
-    const json = await response.json();
-    setProfile(json.data);
+    setProfile(route.params.host);
 
-    const resEvent = await fetch(`${URL}/api/events/user/${json.data._id}`);
+    const resEvent = await fetch(`${URL}/api/events/user/${route.params.host._id}`);
     const jsonResEvent = await resEvent.json();
     setEventList(jsonResEvent.data);
+  };
 
-    const resRating = await fetch(`${URL}/api/ratings/${json.data._id}`);
+  const fetchRating = async () => {
+    const resRating = await fetch(`${URL}/api/ratings/${route.params.host._id}`);
     const jsonResRating = await resRating.json();
     setRatingTotal(
       jsonResRating.data.reduce((x: any, y: any) => {
@@ -44,6 +36,7 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
     (async () => {
       try {
         await fetchProfile();
+        await fetchRating();
       } catch (e) {
         console.log(e);
       }
@@ -91,11 +84,11 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
             <Button
               style={styles.circle}
               shadow={4}
+              onPress={() => {
+                navigation.navigate('RatingList', { host: profile });
+              }}
               _text={{
                 color: '#3B82F6',
-              }}
-              onPress={() => {
-                navigation.navigate('MyRating', { host: { _id: profile._id } });
               }}
             >
               {ratingTotal ? ratingTotal : '0'}

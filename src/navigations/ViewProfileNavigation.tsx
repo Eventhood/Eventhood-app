@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import ViewProfileScreen from '../screens/ViewProfileScreen';
 import DisplayEventScreen from '../screens/DisplayEventScreen';
-
+import RatingScreen from '../screens/RatingScreen';
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -26,14 +26,23 @@ const ViewProfileNavigation = () => {
       <Stack.Screen
         name="EventDetail"
         options={() => ({
-          headerTitle: '',
+          headerShown: false,
+        })}
+        component={DisplayEventScreen}
+      />
+
+      <Stack.Screen
+        name="MyRating"
+        options={() => ({
+          headerTitleAlign: 'center',
+          headerTitle: 'Rating',
           headerStyle: {
             backgroundColor: 'transparent',
             elevation: 0,
             shadowOpacity: 0,
           },
         })}
-        component={DisplayEventScreen}
+        component={RatingScreen}
       />
     </Stack.Navigator>
   );
