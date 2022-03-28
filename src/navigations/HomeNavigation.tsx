@@ -7,6 +7,9 @@ const Stack = createStackNavigator();
 import HomeScreen from '../screens/HomeScreen';
 import DisplayEventScreen from '../screens/DisplayEventScreen';
 import ReportEventScreen from '../screens/ReportEventScreen';
+import ViewOtherProfileScreen from '../screens/ViewOtherProfileScreen';
+import RatingScrollScreen from '../screens/RatingScrollScreen';
+import RatingScreen from '../screens/RatingScreen';
 
 const screenOptionStyle = {
   tabBarShowLabel: false,
@@ -17,7 +20,13 @@ const screenOptionStyle = {
   },
 };
 
-const bottomNavHiddenRoutes = ['EventDetail', 'ReportEvent'];
+const bottomNavHiddenRoutes = [
+  'EventDetail',
+  'ReportEvent',
+  'RateUser',
+  'OtherUserProfile',
+  'RatingList',
+];
 
 const HomeNavigation = ({ navigation, route }: any) => {
   useLayoutEffect(() => {
@@ -61,6 +70,19 @@ const HomeNavigation = ({ navigation, route }: any) => {
         component={DisplayEventScreen}
       />
       <Stack.Screen
+        name="OtherUserProfile"
+        options={() => ({
+          headerTitleAlign: 'center',
+          headerTitle: 'Profile',
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        })}
+        component={ViewOtherProfileScreen}
+      />
+      <Stack.Screen
         name="ReportEvent"
         options={() => ({
           headerTitle: '',
@@ -71,6 +93,33 @@ const HomeNavigation = ({ navigation, route }: any) => {
           },
         })}
         component={ReportEventScreen}
+      />
+
+      <Stack.Screen
+        name="RatingList"
+        options={() => ({
+          headerTitleAlign: 'center',
+          headerTitle: 'Rating',
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        })}
+        component={RatingScreen}
+      />
+      <Stack.Screen
+        name="RateUser"
+        options={() => ({
+          headerTitleAlign: 'center',
+          headerTitle: 'Rate User',
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        })}
+        component={RatingScrollScreen}
       />
     </Stack.Navigator>
   );
