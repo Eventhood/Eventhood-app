@@ -26,18 +26,50 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
   const [mapUrl, setMapUrl] = useState('');
   const [userUUID, setUserUUID] = useState('');
   const [location, setLocation] = useState<any>();
-
+  const [isRegistered, setIsRegistered] = useState<any>(undefined);
   const [showModal, setShowModal] = useState(false);
+  const [registeredId, setRegisteredId] = useState<any>(undefined);
 
   const [showModal2, setShowModal2] = useState(false);
   const isFocused = useIsFocused();
 
-  const registerEventHandler = () => {
-    setShowModal(true);
+  const registerEventHandler = async () => {
+    try {
+      const res = await fetch(`${URL}/api/eventregistrations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          registrationData: {
+            event: route.params.id,
+            user: userUUID,
+          },
+        }),
+      });
+      const resJson = await res.json();
+      setRegisteredId(resJson.data._id);
+      setIsRegistered(true);
+      setShowModal(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const unregisterEventHandler = () => {
-    setShowModal2(true);
+  const unregisterEventHandler = async () => {
+    try {
+      await fetch(`${URL}/api/eventregistrations/${registeredId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+        },
+      });
+      setRegisteredId(undefined);
+      setIsRegistered(false);
+      setShowModal2(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -58,11 +90,26 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
         setMapUrl(
           `https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-m-marker+285A98(${jsonRes.data.location.lon},${jsonRes.data.location.lat})/${jsonRes.data.location.lon},${jsonRes.data.location.lat},14,0/600x300@2x?access_token=pk.eyJ1IjoicGFuZGFub3giLCJhIjoiY2wxMTRsNDd5MmZmdjNsbXV2azk4Ym5vaCJ9.b8tYS-wkMhA64ldIcqnRLw&attribution=false&logo=false`
         );
+        const resEventRegister = await fetch(
+          `${URL}/api/eventregistrations/user/${jsonResUser.data._id}`
+        );
+        const jsonResEventRegister = await resEventRegister.json();
+
+        if ('data' in jsonResEventRegister) {
+          for (let i = 0; i < jsonResEventRegister.data.length; i++) {
+            if (jsonResEventRegister.data[i].event._id === route.params.id) {
+              setIsRegistered(true);
+              setRegisteredId(jsonResEventRegister.data[i]._id);
+              return;
+            }
+            setIsRegistered(false);
+          }
+        }
       } catch (e) {
         console.log('error on fetch post');
       }
     })();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     (async () => {
@@ -136,29 +183,31 @@ const DisplayEventScreen = ({ navigation, route }: any) => {
             </Text>
             <Center>
               {event ? (
-                userUUID === event.host._id ? (
-                  <Button
-                    style={styles.registerButton}
-                    shadow={4}
-                    _text={{
-                      color: '#3B82F6',
-                    }}
-                    onPress={registerEventHandler}
-                  >
-                    Register
-                  </Button>
-                ) : (
-                  <Button
-                    style={styles.unregisterButton}
-                    shadow={4}
-                    _text={{
-                      color: '#EF4444',
-                    }}
-                    onPress={unregisterEventHandler}
-                  >
-                    Unregister
-                  </Button>
-                )
+                userUUID !== event.host._id ? (
+                  !isRegistered ? (
+                    <Button
+                      style={styles.registerButton}
+                      shadow={4}
+                      _text={{
+                        color: '#3B82F6',
+                      }}
+                      onPress={registerEventHandler}
+                    >
+                      Register
+                    </Button>
+                  ) : (
+                    <Button
+                      style={styles.unregisterButton}
+                      shadow={4}
+                      _text={{
+                        color: '#EF4444',
+                      }}
+                      onPress={unregisterEventHandler}
+                    >
+                      Unregister
+                    </Button>
+                  )
+                ) : null
               ) : null}
             </Center>
           </HStack>
