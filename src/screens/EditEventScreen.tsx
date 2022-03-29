@@ -26,7 +26,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
     await fetch(`${URL}/api/events/${route.params.id}`, {
       method: 'DELETE',
     });
-    console.log('in handleCancelEvent');
   };
 
   const handleUpdateEvent = async () => {
