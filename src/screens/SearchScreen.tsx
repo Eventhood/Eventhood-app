@@ -12,7 +12,7 @@ const auth = getAuth(app);
 
 const SearchScreen = ({ navigation }: any) => {
   const [category, setCategory] = useState([]);
-
+  //test1
   useEffect(() => {
     (async () => {
       const response = await fetch(`${URL}/api/eventcategories/`);
