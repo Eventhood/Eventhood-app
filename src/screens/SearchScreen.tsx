@@ -12,7 +12,7 @@ const auth = getAuth(app);
 
 const SearchScreen = ({ navigation }: any) => {
   const [category, setCategory] = useState([]);
-  //test1
+
   useEffect(() => {
     (async () => {
       const response = await fetch(`${URL}/api/eventcategories/`);
@@ -78,41 +78,32 @@ const SearchScreen = ({ navigation }: any) => {
           <ErrorMessage error={error} visible={error ? true : false} />
 
           <View style={styles.container}>
-            <View style={styles.box}>
-              <ImageBackground
-                style={{ flex: 1 }}
-                source={{
-                  uri: 'https://c1.wallpaperflare.com/preview/1009/569/89/airport-fly-departure-travel.jpg',
-                }}
-              >
-                <View style={styles.inner}>
-                  <Text
-                    color="white"
-                    fontSize={20}
-                    minWidth="200"
-                    accessibilityLabel="Choose Category"
-                  >
-                    {category ? (
-                      category.map((category: any) => {
-                        return <Text>{category.name}</Text>;
-                      })
-                    ) : (
-                      <Text>No Category</Text>
-                    )}
-                  </Text>
-                </View>
-              </ImageBackground>
-            </View>
-            <View style={styles.box}>
-              <View style={styles.inner}>
-                <Text>Category</Text>
-              </View>
-            </View>
-            <View style={styles.box}>
-              <View style={styles.inner}>
-                <Text>Category</Text>
-              </View>
-            </View>
+            <Text>
+              {category ? (
+                category.map((category: any) => {
+                  return (
+                    <View style={styles.box}>
+                      <ImageBackground
+                        style={{ borderRadius: 10 }}
+                        source={{
+                          uri: 'https://c1.wallpaperflare.com/preview/1009/569/89/airport-fly-departure-travel.jpg',
+                        }}
+                      >
+                        <View style={styles.inner}>
+                          <Text color="white" fontSize={20}>
+                            {category.name}
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    </View>
+                  );
+                })
+              ) : (
+                <Text color="white" fontSize={20}>
+                  No Category
+                </Text>
+              )}
+            </Text>
           </View>
         </Box>
       </Box>
@@ -121,35 +112,24 @@ const SearchScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  title2: {
-    paddingLeft: 30,
-    paddingBottom: 10,
-    fontSize: 20,
-  },
-
-  title: {
-    left: 30,
-    fontSize: 20,
-  },
-
   container: {
     width: '100%',
     height: '100%',
-    padding: 2,
+    padding: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    backgroundColor: 'green',
   },
   box: {
     width: '50%',
-    height: '30%',
+    height: '55%',
     padding: 10,
-
-    justifyContent: 'center',
+    backgroundColor: 'blue',
+    alignItems: 'center',
   },
 
   inner: {
     flex: 1,
-
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
