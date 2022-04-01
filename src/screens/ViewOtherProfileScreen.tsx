@@ -76,6 +76,20 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
         </Text>
       </Center>
       <Center>
+        <View style={styles.btnfollow}>
+          <Button
+            style={styles.follow}
+            _text={{
+              color: 'black',
+              bottom: 1,
+              textAlign: 'center',
+            }}
+          >
+            Follow
+          </Button>
+        </View>
+      </Center>
+      <Center>
         <View style={{ flexDirection: 'row' }}>
           <Center style={styles.buttonStyle}>
             <Text fontSize="lg" fontWeight="semibold" my={2}>
@@ -148,6 +162,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderColor: '#3B82F6',
     borderWidth: 2,
+  },
+  follow: {
+    width: 120,
+    height: 34,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#3B82F6',
+  },
+  btnfollow: {
+    padding: 20,
   },
 });
 
