@@ -88,7 +88,7 @@ const MenuStackNavigator = ({ navigation, route }: any) => {
       <Stack.Screen
         name="SignUpEvent"
         options={() => ({
-          title: 'Sign Up Event',
+          title: 'Upcoming Registered Events',
           headerTitleAlign: 'center',
         })}
         component={SignUpEventScreen}

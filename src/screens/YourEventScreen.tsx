@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useIsFocused } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 import { app } from '../utils/firebase';
 import { URL } from '@env';
@@ -15,6 +16,7 @@ const YourEventScreen = ({ navigation }: any) => {
   const [eventList, setEventList] = useState([]);
   const isFocused = useIsFocused();
   const [error, setError] = useState('');
+  const [location, setLocation] = useState<any>();
 
   useEffect(() => {
     (async () => {
@@ -35,6 +37,19 @@ const YourEventScreen = ({ navigation }: any) => {
     return () => {
       setEventList([]);
     };
+  }, [isFocused]);
+
+  useEffect(() => {
+    (async () => {
+      let locationInfo = await Location.requestForegroundPermissionsAsync();
+
+      while (locationInfo.status !== 'granted') {
+        locationInfo = await Location.requestForegroundPermissionsAsync();
+      }
+
+      let locations = await Location.getCurrentPositionAsync({});
+      setLocation(locations);
+    })();
   }, [isFocused]);
 
   return (
@@ -63,6 +78,7 @@ const YourEventScreen = ({ navigation }: any) => {
                       navigation={navigation}
                       eventInfo={event}
                       key={key}
+                      location={location}
                     ></YourEventCard>
                   );
                 })

@@ -56,7 +56,7 @@ const ProfileScreen = ({ navigation }: any) => {
           onPress={() => navigation.push('YourEvent-m')}
         >
           <MenuNavigationLink
-            name="My Event"
+            name="Hosted Events"
             icon={<MaterialCommunityIcons name="calendar-outline" color="#1E293B" size={30} />}
           />
         </TouchableHighlight>
@@ -66,7 +66,7 @@ const ProfileScreen = ({ navigation }: any) => {
           onPress={() => navigation.push('SignUpEvent')}
         >
           <MenuNavigationLink
-            name="Sign up Event"
+            name="Upcoming Registered Events"
             icon={<MaterialCommunityIcons name="calendar-check" color="#1E293B" size={30} />}
           />
         </TouchableHighlight>

@@ -19,10 +19,10 @@ const OwnEventNavigation = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen
-        name="EditProfile"
+        name="YourEvent"
         options={() => ({
           headerTitleAlign: 'center',
-          title: 'Your Event',
+          title: 'Hosted Events',
         })}
         component={YourEventScreen}
       />

@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { Text, Box, Stack, Heading, Image, Button, HStack } from 'native-base';
+import { distance } from '../utils/location';
 
-const YourEventCard = ({ navigation, eventInfo }: any) => {
+const YourEventCard = ({ navigation, eventInfo, location }: any) => {
   return (
     <Box padding={6}>
       <Image
@@ -21,7 +22,14 @@ const YourEventCard = ({ navigation, eventInfo }: any) => {
             </HStack>
             <HStack alignItems="center">
               <Text ml={1} color="gray.500" fontWeight="500">
-                20 Km
+                {location
+                  ? `${distance(
+                      eventInfo.location.lat,
+                      location.coords.latitude,
+                      eventInfo.location.lon,
+                      location.coords.longitude
+                    )} Km`
+                  : null}
               </Text>
             </HStack>
           </HStack>

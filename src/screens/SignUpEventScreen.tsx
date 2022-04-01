@@ -97,12 +97,11 @@ const SignUpEventScreen = ({ navigation }: any) => {
       {registeredEventList.length !== 0
         ? registeredEventList.map((event: any, key) => {
             return (
-              <Box padding={6}>
+              <Box padding={6} key={key}>
                 <RegisteredEventCard
                   navigation={navigation}
                   location={location}
                   eventInfo={event}
-                  key={key}
                 />
                 <HStack>
                   <Button

@@ -1,5 +1,4 @@
-import { StyleSheet, TouchableHighlight } from 'react-native';
-import { Text, Box, Stack, Heading, Image, Button, HStack, Flex } from 'native-base';
+import { Text, Stack, Heading, Image, HStack } from 'native-base';
 import { distance } from '../utils/location';
 
 const RegisteredEventCard = ({ navigation, eventInfo, location }: any) => {
@@ -38,7 +37,7 @@ const RegisteredEventCard = ({ navigation, eventInfo, location }: any) => {
         <HStack alignItems="center" space={4} justifyContent="space-between">
           <HStack alignItems="center">
             <Text ml={1} color="gray.500" fontWeight="500">
-              {eventInfo ? `Created by @${eventInfo.event.host.displayName}` : ''}
+              {eventInfo ? `Created by @${eventInfo.event.host.accountHandle}` : ''}
             </Text>
           </HStack>
           <HStack alignItems="center">
