@@ -56,6 +56,8 @@ const EditEventScreen = ({ navigation, route }: any) => {
       setError('Max participants cannot be empty.');
     } else if (isNaN(Number(maxParticipants))) {
       setError('Max participants should be a number.');
+    } else if (Number(maxParticipants) === 0) {
+      setError('Max participants cannot be 0');
     } else if (date.getTime() < timeNow.getTime()) {
       setError('The event time must at least be 2 hours from now.');
     } else if (description.trim() === '') {
