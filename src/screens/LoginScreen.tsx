@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, View, Platform } from 'react-native';
 import { Input, Icon, Text, FormControl, Image, Center, Box, HStack, Button } from 'native-base';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 import ErrorMessage from '../components/ErrorMessage';
 import SafeAreaView from '../components/SafeAreaView';
@@ -15,14 +16,23 @@ const LoginScreen = ({ navigation }: any) => {
   const [password, setPassword] = useState('');
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const isFocused = useIsFocused();
 
   const onLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {})
-      .catch((error) => {
-        setLoginError('Your email or password may be incorrect.');
-      });
+    if (email.trim() === '' || password.trim() === '') {
+      setLoginError('Username or Password cannot be empty');
+    } else {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {})
+        .catch((error) => {
+          setLoginError('Your email or password may be incorrect.');
+        });
+    }
   };
+
+  useEffect(() => {
+    setLoginError('');
+  }, [isFocused]);
 
   return (
     <SafeAreaView>
@@ -85,21 +95,6 @@ const LoginScreen = ({ navigation }: any) => {
               Login
             </Button>
 
-            <Text style={styles.text}>Or Log In with</Text>
-
-            <HStack my={4} space={8} justifyContent="center">
-              <Center style={styles.icon}>
-                <AntDesign name="google" size={20} color="#DB4437" />
-              </Center>
-              <Center style={styles.icon}>
-                <AntDesign name="facebook-square" size={20} color="#4267B2" />
-              </Center>
-              {Platform.OS === 'ios' ? (
-                <Center style={styles.icon}>
-                  <AntDesign name="apple1" size={20} color="#000000" />
-                </Center>
-              ) : null}
-            </HStack>
             <Center>
               <Text>
                 Newbie?{' '}

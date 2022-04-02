@@ -26,40 +26,62 @@ const SignupScreen = ({ navigation }: any) => {
   const [signupError, setSignupError] = useState('');
 
   const onHandleSignup = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((createdUserData: UserCredential) => {
-        (async () => {
-          const bodyData = {
-            userData: {
-              uuid: createdUserData.user.uid,
+    if (username.trim() === '') {
+      setSignupError('Username cannot be empty');
+    } else if (fullName.trim() === '') {
+      setSignupError('Full name cannot be empty');
+    } else if (email.trim() === '') {
+      setSignupError('Email cannot be empty');
+    } else if (password.trim() === '') {
+      setSignupError('Password cannot be empty');
+    } else {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((createdUserData: UserCredential) => {
+          (async () => {
+            const bodyData = {
+              userData: {
+                uuid: createdUserData.user.uid,
+                displayName: fullName,
+                accountHandle: username,
+                photoURL: `https://ui-avatars.com/api/?name=${fullName.replace(/\s/g, '+')}`,
+                creationTime: createdUserData.user.metadata.creationTime,
+                isAdministrator: false,
+                email: createdUserData.user.email,
+              },
+            };
+
+            await fetch(`${URL}/api/users`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(bodyData),
+            });
+
+            updateProfile(createdUserData.user, {
               displayName: fullName,
-              accountHandle: username,
               photoURL: `https://ui-avatars.com/api/?name=${fullName.replace(/\s/g, '+')}`,
-              creationTime: createdUserData.user.metadata.creationTime,
-              isAdministrator: false,
-              email: createdUserData.user.email,
-            },
-          };
-
-          await fetch(`${URL}/api/users`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(bodyData),
-          });
-
-          updateProfile(createdUserData.user, {
-            displayName: fullName,
-            photoURL: `https://ui-avatars.com/api/?name=${fullName.replace(/\s/g, '+')}`,
-          }).catch((error) => {
-            setSignupError(error.message);
-          });
-        })();
-      })
-      .catch((error) => {
-        setSignupError(error.message);
-      });
+            }).catch((error) => {
+              setSignupError(error.message);
+            });
+          })();
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case 'auth/invalid-email':
+              setSignupError('Invalid email');
+              break;
+            case 'auth/email-already-in-use':
+              setSignupError('Email already exist');
+              break;
+            case 'auth/weak-password':
+              setSignupError('Password should be at least 6 characters');
+              break;
+            default:
+              setSignupError(error.message || 'Internal Error');
+          }
+        });
+    }
   };
   return (
     <SafeAreaViewTransparent>
@@ -132,22 +154,6 @@ const SignupScreen = ({ navigation }: any) => {
             <Button style={styles.button} onPress={onHandleSignup}>
               Create an Account
             </Button>
-
-            <Text style={styles.text}>Or Sign Up with</Text>
-
-            <HStack my={4} space={8} justifyContent="center">
-              <Center style={styles.icon}>
-                <AntDesign name="google" size={20} color="#DB4437" />
-              </Center>
-              <Center style={styles.icon}>
-                <AntDesign name="facebook-square" size={20} color="#4267B2" />
-              </Center>
-              {Platform.OS === 'ios' ? (
-                <Center style={styles.icon}>
-                  <AntDesign name="apple1" size={20} color="#000000" />
-                </Center>
-              ) : null}
-            </HStack>
 
             <Center mb={8}>
               <Text>
