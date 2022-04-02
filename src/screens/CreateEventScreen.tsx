@@ -18,36 +18,60 @@ const CreateEventScreen = ({ navigation }: any) => {
   const [maxParticipants, setMaxParticipants] = useState('');
   const [categoryList, setCategoryList] = useState([]);
   const [description, setDescription] = useState('');
-
   const [date, setDate] = useState(new Date());
   const [showTime, setShowTime] = useState(false);
   const [showDate, setShowDate] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCreateEvent = async () => {
-    const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
-      headers: {
-        Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
-      },
-    });
-    const jsonRes = await res.json();
+    const timeNow = new Date();
+    timeNow.setHours(timeNow.getHours() + 2);
 
-    await fetch(`${URL}/api/events`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventData: {
-          host: jsonRes.data._id,
-          name: name,
-          location: location,
-          category: category,
-          maxParticipants: maxParticipants,
-          description: description,
-          startTime: date,
+    if (name.trim() === '') {
+      setError('Event name cannot be empty.');
+    } else if (location.trim() === '') {
+      setError('Location cannot be empty.');
+    } else if (category.trim() === '') {
+      setError('Category cannot be empty.');
+    } else if (maxParticipants.trim() === '') {
+      setError('Max participants cannot be empty.');
+    } else if (isNaN(Number(maxParticipants))) {
+      setError('Max participants should be a number.');
+    } else if (date.getTime() < timeNow.getTime()) {
+      setError('The event time must at least be 2 hours from now.');
+    } else if (description.trim() === '') {
+      setError('Description cannot be empty.');
+    } else {
+      setIsLoading(true);
+      const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
         },
-      }),
-    });
+      });
+      const jsonRes = await res.json();
+
+      await fetch(`${URL}/api/events`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventData: {
+            host: jsonRes.data._id,
+            name: name.trim(),
+            location: location.trim(),
+            category: category.trim(),
+            maxParticipants: maxParticipants.trim(),
+            description: description.trim(),
+            startTime: date,
+          },
+        }),
+      });
+      setIsLoading(false);
+
+      navigation.goBack();
+    }
   };
 
   useEffect(() => {
@@ -59,7 +83,6 @@ const CreateEventScreen = ({ navigation }: any) => {
     })();
   }, []);
 
-  const [error, setError] = useState('');
   return (
     <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -68,7 +91,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Name
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
               value={name}
@@ -83,7 +105,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Location
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
               value={location}
@@ -98,7 +119,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Category
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
 
             <Select
               minWidth="200"
@@ -126,7 +146,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Max number of participant
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
               type="number"
@@ -142,7 +161,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Date
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
@@ -170,7 +188,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Time
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             {showTime && (
               <DateTimePicker
                 testID="dateTimePicker1"
@@ -199,7 +216,6 @@ const CreateEventScreen = ({ navigation }: any) => {
             <Text fontSize={'lg'} mb="4">
               Description
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <TextArea
               h={40}
               bg={'#ffffff'}
@@ -209,11 +225,15 @@ const CreateEventScreen = ({ navigation }: any) => {
               }}
             />
           </Box>
+          <Box mt={4}>
+            <ErrorMessage error={error} visible={error ? true : false} />
+          </Box>
+
           <Button
-            style={styles.button}
+            style={isLoading ? styles.buttonDisabled : styles.button}
+            disabled={isLoading}
             onPress={async () => {
               await handleCreateEvent();
-              navigation.goBack();
             }}
           >
             Create Event
@@ -226,6 +246,7 @@ const CreateEventScreen = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   button: { backgroundColor: '#000000', height: 50, marginBottom: 30, marginTop: 30 },
+  buttonDisabled: { backgroundColor: '#6b7280', height: 50, marginBottom: 30, marginTop: 30 },
 });
 
 export default CreateEventScreen;

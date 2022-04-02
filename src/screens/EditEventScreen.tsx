@@ -1,4 +1,15 @@
-import { Text, Box, TextArea, Input, Button, Select, CheckIcon } from 'native-base';
+import {
+  Text,
+  Box,
+  TextArea,
+  HStack,
+  Input,
+  Button,
+  Select,
+  CheckIcon,
+  Modal,
+  Center,
+} from 'native-base';
 import { StyleSheet, View, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -14,37 +25,63 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [maxParticipants, setMaxParticipants] = useState('');
   const [categoryList, setCategoryList] = useState([]);
   const [description, setDescription] = useState('');
-
   const [date, setDate] = useState(new Date());
-
   const [showTime, setShowTime] = useState(false);
   const [showDate, setShowDate] = useState(false);
-
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleCancelEvent = async () => {
+    setIsLoading(true);
+
     await fetch(`${URL}/api/events/${route.params.id}`, {
       method: 'DELETE',
     });
+    setShowModal(false);
+    setIsLoading(false);
+    navigation.goBack();
   };
 
   const handleUpdateEvent = async () => {
-    await fetch(`${URL}/api/events/${route.params.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventData: {
-          name: name,
-          location: location,
-          category: category,
-          maxParticipants: maxParticipants,
-          description: description,
-          startTime: date,
+    const timeNow = new Date();
+    timeNow.setHours(timeNow.getHours() + 2);
+    if (name.trim() === '') {
+      setError('Event name cannot be empty.');
+    } else if (location.trim() === '') {
+      setError('Location cannot be empty.');
+    } else if (category.trim() === '') {
+      setError('Category cannot be empty.');
+    } else if (maxParticipants.trim() === '') {
+      setError('Max participants cannot be empty.');
+    } else if (isNaN(Number(maxParticipants))) {
+      setError('Max participants should be a number.');
+    } else if (date.getTime() < timeNow.getTime()) {
+      setError('The event time must at least be 2 hours from now.');
+    } else if (description.trim() === '') {
+      setError('Description cannot be empty.');
+    } else {
+      setIsLoading(true);
+
+      await fetch(`${URL}/api/events/${route.params.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      }),
-    });
+        body: JSON.stringify({
+          eventData: {
+            name: name.trim(),
+            location: location.trim(),
+            category: category.trim(),
+            maxParticipants: maxParticipants.trim(),
+            description: description.trim(),
+            startTime: date,
+          },
+        }),
+      });
+      setIsLoading(false);
+      navigation.goBack();
+    }
   };
 
   useEffect(() => {
@@ -73,7 +110,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Name
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
               value={name}
@@ -88,7 +124,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Location
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
               value={location}
@@ -103,7 +138,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Category
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Select
               selectedValue={category}
               minWidth="200"
@@ -129,7 +163,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Max number of participant
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <Input
               bg={'#ffffff'}
               type="number"
@@ -145,7 +178,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Date
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
@@ -173,7 +205,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Time
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             {showTime && (
               <DateTimePicker
                 testID="dateTimePicker1"
@@ -202,7 +233,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
             <Text fontSize={'lg'} mb="4">
               Description
             </Text>
-            <ErrorMessage error={error} visible={error ? true : false} />
             <TextArea
               h={40}
               bg={'#ffffff'}
@@ -212,45 +242,120 @@ const EditEventScreen = ({ navigation, route }: any) => {
               }}
             />
           </Box>
+          <Box mt={4}>
+            <ErrorMessage error={error} visible={error ? true : false} />
+          </Box>
           <Button
             _text={{
               fontWeight: 'semibold',
             }}
-            style={styles.button}
+            style={isLoading ? styles.buttonDisabled : styles.button}
+            disabled={isLoading}
             onPress={async () => {
               await handleUpdateEvent();
-              console.log('updated');
-              navigation.goBack();
             }}
           >
             Update Event
           </Button>
 
           <Button
-            style={styles.buttonDelete}
+            style={isLoading ? styles.buttonDeleteDisabled : styles.buttonDelete}
+            disabled={isLoading}
             _text={{
               fontWeight: 'semibold',
             }}
-            onPress={async () => {
-              await handleCancelEvent();
-              console.log('deleted');
-              navigation.goBack();
+            onPress={() => {
+              setShowModal(true);
             }}
           >
             Cancel Event
           </Button>
         </Box>
       </TouchableWithoutFeedback>
+
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+        }}
+      >
+        <Modal.Content style={styles.modal}>
+          <Modal.Body>
+            <Center>
+              <Text fontSize="lg" fontWeight="semibold" m={4}>
+                Do you wish to delete this event?
+              </Text>
+            </Center>
+            <HStack alignItems="center" space={4}>
+              <Button
+                style={isLoading ? styles.buttonModalDisabled : styles.buttonModal}
+                onPress={() => {
+                  setShowModal(false);
+                }}
+              >
+                No
+              </Button>
+              <Button
+                style={isLoading ? styles.cancelModalDisabled : styles.cancelModal}
+                onPress={async () => {
+                  await handleCancelEvent();
+                }}
+              >
+                Yes
+              </Button>
+            </HStack>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  button: { backgroundColor: '#000000', height: 50, marginBottom: 30, marginTop: 30 },
+  buttonDisabled: {
+    backgroundColor: '#6b7280',
+    height: 50,
+    marginBottom: 30,
+    marginTop: 30,
+  },
+  button: {
+    backgroundColor: '#000000',
+    height: 50,
+    marginBottom: 30,
+    marginTop: 30,
+  },
   buttonDelete: {
     backgroundColor: '#EF4444',
     height: 50,
     marginBottom: 30,
+  },
+  buttonDeleteDisabled: {
+    backgroundColor: '#fca5a5',
+    height: 50,
+    marginBottom: 30,
+  },
+  modal: {
+    padding: 10,
+  },
+  buttonModal: {
+    backgroundColor: '#000000',
+    height: 40,
+    flex: 1,
+  },
+  cancelModal: {
+    backgroundColor: '#EF4444',
+    height: 40,
+    flex: 1,
+  },
+  buttonModalDisabled: {
+    backgroundColor: '#6b7280',
+    height: 40,
+    flex: 1,
+  },
+  cancelModalDisabled: {
+    backgroundColor: '#fca5a5',
+    height: 40,
+    flex: 1,
   },
 });
 
