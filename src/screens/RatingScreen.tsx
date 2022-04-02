@@ -16,6 +16,7 @@ const RatingScreen = ({ route, navigation }: any) => {
   const isFocused = useIsFocused();
   const [profile, setProfile] = useState<any>();
   const [ratingList, setRatingList] = useState([]);
+  const [isMyRatingExist, setIsMyRatingExist] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +32,12 @@ const RatingScreen = ({ route, navigation }: any) => {
         const resRating = await fetch(`${URL}/api/ratings/${route.params.host._id}`);
         const jsonResRating = await resRating.json();
         setRatingList(jsonResRating.data);
-        console.log(jsonResRating.data);
+
+        if (jsonResRating.data.some((rating: any) => rating.ratedBy._id === jsonRes.data._id)) {
+          setIsMyRatingExist(true);
+        } else {
+          setIsMyRatingExist(false);
+        }
       } catch (e) {
         console.log('Services Unavailable');
       }
@@ -53,8 +59,8 @@ const RatingScreen = ({ route, navigation }: any) => {
           )}
         </View>
       </ScrollView>
-      {profile ? (
-        profile._id !== route.params.host._id ? (
+      {profile && ratingList ? (
+        profile._id !== route.params.host._id && !isMyRatingExist ? (
           <Fab
             renderInPortal={false}
             shadow={2}
