@@ -119,7 +119,7 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
                 color: '#3B82F6',
               }}
             >
-              {eventList ? eventList.length : 'N/A'}
+              {eventList ? eventList.length : '0'}
             </Button>
           </Center>
         </View>
