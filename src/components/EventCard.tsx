@@ -39,7 +39,7 @@ const EventCard = ({ navigation, eventInfo, location }: any) => {
               </HStack>
             </HStack>
           </Stack>
-          <Text>{eventInfo.description}</Text>
+          <Text left={1}>{eventInfo.description}</Text>
           <HStack alignItems="center" space={4} justifyContent="space-between">
             <HStack alignItems="center">
               <Text ml={1} color="gray.500" fontWeight="500">
