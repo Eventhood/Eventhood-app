@@ -2,10 +2,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
 
-import HomeScreen from '../screens/HomeScreen';
-import SearchScreen from '../screens/SearchScreen';
 import { MenuStackNavigator } from './StackNavigator';
 import HomeNavigation from './HomeNavigation';
+import SearchNavigation from './SearchNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +36,7 @@ const BottomTab = () => {
       ></Tab.Screen>
       <Tab.Screen
         name="Search-b"
-        component={SearchScreen}
+        component={SearchNavigation}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (
