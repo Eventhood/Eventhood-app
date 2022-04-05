@@ -10,7 +10,7 @@ import EventCard from '../components/EventCard';
 import { app } from '../utils/firebase';
 
 const auth = getAuth(app);
-
+//test 1
 const ViewProfileScreen = ({ route, navigation }: any) => {
   const [profile, setProfile] = useState<any>();
   const [eventList, setEventList] = useState([]);

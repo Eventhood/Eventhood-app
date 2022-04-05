@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import { useIsFocused } from '@react-navigation/native';
 
 import EventCard from '../components/EventCard';
-//test 1
+
 const ViewProfileScreen = ({ route, navigation }: any) => {
   const [profile, setProfile] = useState<any>();
   const [eventList, setEventList] = useState([]);
