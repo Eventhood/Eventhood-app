@@ -1,7 +1,7 @@
 import { Text, Box, Stack, Heading, Image, AspectRatio, HStack } from 'native-base';
 import { TouchableHighlight } from 'react-native';
 import { distance } from '../utils/location';
-
+//1
 const EventCard = ({ navigation, eventInfo, location }: any) => {
   return (
     <TouchableHighlight
