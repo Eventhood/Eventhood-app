@@ -2,8 +2,8 @@
   "expo": {
     "name": "Eventhood",
     "slug": "eventhood-app",
-    "privacy":"public",
-    "description":"Eventhood application",
+    "privacy": "public",
+    "description": "Eventhood application",
     "version": "1.0.0",
     "entryPoint": "./src/App.tsx",
     "orientation": "portrait",
