@@ -6,7 +6,7 @@ import SearchScreen from '../screens/SearchScreen';
 import SearchCategoryScreen from '../screens/SearchCategoryScreen';
 import DisplayEventScreen from '../screens/DisplayEventScreen';
 import ReportEventScreen from '../screens/ReportEventScreen';
-
+import SearchQueryScreen from '../screens/SearchQueryScreen';
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -18,7 +18,7 @@ const screenOptionStyle = {
   },
 };
 
-const bottomNavHiddenRoutes = ['SearchCategory', 'EventDetail', 'ReportEvent'];
+const bottomNavHiddenRoutes = ['SearchCategory', 'EventDetail', 'ReportEvent', 'SearchQueryEvent'];
 
 const SearchNavigation = ({ navigation, route }: any) => {
   useLayoutEffect(() => {
@@ -78,6 +78,19 @@ const SearchNavigation = ({ navigation, route }: any) => {
           },
         })}
         component={ReportEventScreen}
+      />
+      <Stack.Screen
+        name="SearchQueryEvent"
+        options={() => ({
+          headerTitle: '',
+          headerShown: false,
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        })}
+        component={SearchQueryScreen}
       />
     </Stack.Navigator>
   );

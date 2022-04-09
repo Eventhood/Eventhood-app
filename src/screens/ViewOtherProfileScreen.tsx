@@ -4,14 +4,22 @@ import { Text, Center, Button, Container, Avatar } from 'native-base';
 import { URL } from '@env';
 import * as Location from 'expo-location';
 import { useIsFocused } from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
 
 import EventCard from '../components/EventCard';
-//test 1
+import { app } from '../utils/firebase';
+
+const auth = getAuth(app);
+
 const ViewProfileScreen = ({ route, navigation }: any) => {
   const [profile, setProfile] = useState<any>();
+  const [ownProfile, setOwnProfile] = useState<any>();
   const [eventList, setEventList] = useState([]);
   const [ratingTotal, setRatingTotal] = useState(0);
   const [location, setLocation] = useState<any>();
+  const [isFollow, setIsFollow] = useState<any>(undefined);
+  const [followedId, setFollowedId] = useState<any>(undefined);
+
   const isFocused = useIsFocused();
 
   const fetchProfile = async () => {
@@ -32,10 +40,83 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
     );
   };
 
+  const followHandler = async () => {
+    // try {
+    //   console.log(
+    //     JSON.stringify({
+    //       followedBy: ownProfile._id,
+    //       following: route.params.host._id,
+    //     })
+    //   );
+    //   const res = await fetch(`${URL}/api/follows`, {
+    //     method: 'POST',
+    //     headers: {
+    //       Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+    //     },
+    //     body: JSON.stringify({
+    //       followData: {
+    //         followedBy: ownProfile._id,
+    //         following: route.params.host._id,
+    //       },
+    //     }),
+    //   });
+    //   setIsFollow(true);
+    //   console.log(await res.json());
+    // } catch (e) {
+    //   console.log(e);
+    // }
+  };
+
+  const unFollowHandler = async () => {
+    // try {
+    //   console.log(
+    //     JSON.stringify({
+    //       followedBy: ownProfile._id,
+    //       following: route.params.host._id,
+    //     })
+    //   );
+    //   const res = await fetch(`${URL}/api/follows${route.params.host._id}`, {
+    //     method: 'DELETE',
+    //     headers: {
+    //       Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+    //     },
+    //   });
+    //   console.log(await res.json());
+    //   const resJson = await res.json();
+    //   setFollowedId(undefined);
+    //   setIsFollow(false);
+    //   setFollowedId(resJson.data._id);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+  };
+
   useEffect(() => {
     (async () => {
       try {
         await fetchProfile();
+        const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
+          headers: {
+            Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+          },
+        });
+        const jsonRes = await res.json();
+        setOwnProfile(jsonRes.data);
+        const resFollowing = await fetch(`${URL}/api/follows/following/${jsonRes.data._id}`);
+        const jsonResFollowing = await resFollowing.json();
+
+        if ('data' in jsonResFollowing) {
+          for (let i = 0; i < jsonResFollowing.data.length; i++) {
+            if (jsonResFollowing.data[i].followedBy._id === jsonRes.data._id) {
+              setIsFollow(true);
+              setFollowedId(jsonResFollowing.data[i]._id);
+              return;
+            }
+            setIsFollow(false);
+          }
+        } else {
+          setIsFollow(false);
+        }
         await fetchRating();
       } catch (e) {
         console.log(e);
@@ -76,18 +157,33 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
         </Text>
       </Center>
       <Center>
-        <View style={styles.btnfollow}>
-          <Button
-            style={styles.follow}
-            _text={{
-              color: 'black',
-              bottom: 1,
-              textAlign: 'center',
-            }}
-          >
-            Follow
-          </Button>
-        </View>
+        {ownProfile ? (
+          ownProfile._id !== route.params.host._id ? (
+            isFollow ? (
+              <Button
+                style={styles.unFollow}
+                _text={{
+                  color: 'black',
+                  textAlign: 'center',
+                }}
+                onPress={unFollowHandler}
+              >
+                Unfollow
+              </Button>
+            ) : (
+              <Button
+                style={styles.follow}
+                _text={{
+                  color: 'black',
+                  textAlign: 'center',
+                }}
+                onPress={followHandler}
+              >
+                Follow
+              </Button>
+            )
+          ) : null
+        ) : null}
       </Center>
       <Center>
         <View style={{ flexDirection: 'row' }}>
@@ -164,15 +260,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   follow: {
+    margin: 15,
     width: 120,
-    height: 34,
+    height: 40,
     backgroundColor: '#ffffff',
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#3B82F6',
   },
-  btnfollow: {
-    padding: 20,
+  unFollow: {
+    margin: 15,
+    width: 120,
+    height: 40,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#EF4444',
   },
 });
 

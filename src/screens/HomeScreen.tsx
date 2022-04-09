@@ -57,17 +57,9 @@ const HomeScreen = ({ navigation }: any) => {
           </Heading>
         </Container>
 
-        <SearchBar navigation={navigation} />
+        <SearchBar navigation={navigation} path="Search-b" />
 
-        <Box mx={5} width="80%">
-          <Slider defaultValue={15} minValue={0} maxValue={100} step={10}>
-            <Slider.Track>
-              <Slider.FilledTrack />
-            </Slider.Track>
-            <Slider.Thumb />
-          </Slider>
-        </Box>
-        <Text fontSize="xl" fontWeight="bold" padding={6}>
+        <Text fontSize="xl" fontWeight="bold" pl={6}>
           Recommended events
         </Text>
         {eventList.length

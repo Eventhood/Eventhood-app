@@ -2,12 +2,12 @@ import { Text, Button, Flex } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 
-const SearchBar = ({ navigation }: any) => {
+const SearchBar = ({ navigation, path }: any) => {
   return (
     <Button
       style={styles.searchBar}
       onPress={() => {
-        navigation.navigate('Search-b');
+        navigation.navigate(path);
       }}
     >
       <Flex flexDirection={'row'}>
