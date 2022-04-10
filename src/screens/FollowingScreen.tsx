@@ -15,23 +15,25 @@ const FollowingScreen = () => {
   const [userUUID, setUserUUID] = useState('');
 
   const unFollowHandler = async (followingId: string) => {
-    // try {
-    //   const res = await fetch(`${URL}/api/follows${followingId}`, {
-    //     method: 'DELETE',
-    //     headers: {
-    //       Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
-    //     },
-    //   });
-    //   const followings = await fetch(`${URL}/api/follows/following/${userUUID}`);
-    //   const jsonResFollowing = await followings.json();
-    //   if ('data' in jsonResFollowing) {
-    //     setFollowings(jsonResFollowing.data);
-    //   } else {
-    //     setFollowings([]);
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      const res = await fetch(`${URL}/api/follows/${followingId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+        },
+      });
+
+      const followings = await fetch(`${URL}/api/follows/following/${userUUID}`);
+
+      const jsonResFollowing = await followings.json();
+      if ('data' in jsonResFollowing) {
+        setFollowings(jsonResFollowing.data);
+      } else {
+        setFollowings([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -86,9 +88,7 @@ const FollowingScreen = () => {
                       textAlign: 'center',
                     }}
                     shadow={'4'}
-                    onPress={async () => {
-                      await unFollowHandler(following.following._id);
-                    }}
+                    onPress={() => unFollowHandler(following._id)}
                   >
                     Unfollow
                   </Button>

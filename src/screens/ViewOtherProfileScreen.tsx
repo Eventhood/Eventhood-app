@@ -41,54 +41,42 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
   };
 
   const followHandler = async () => {
-    // try {
-    //   console.log(
-    //     JSON.stringify({
-    //       followedBy: ownProfile._id,
-    //       following: route.params.host._id,
-    //     })
-    //   );
-    //   const res = await fetch(`${URL}/api/follows`, {
-    //     method: 'POST',
-    //     headers: {
-    //       Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
-    //     },
-    //     body: JSON.stringify({
-    //       followData: {
-    //         followedBy: ownProfile._id,
-    //         following: route.params.host._id,
-    //       },
-    //     }),
-    //   });
-    //   setIsFollow(true);
-    //   console.log(await res.json());
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      const res = await fetch(`${URL}/api/follows`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+        },
+        body: JSON.stringify({
+          followData: {
+            followedBy: ownProfile._id,
+            following: route.params.host._id,
+          },
+        }),
+      });
+
+      const jsonRes = await res.json();
+      setFollowedId(jsonRes.data._id);
+      setIsFollow(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const unFollowHandler = async () => {
-    // try {
-    //   console.log(
-    //     JSON.stringify({
-    //       followedBy: ownProfile._id,
-    //       following: route.params.host._id,
-    //     })
-    //   );
-    //   const res = await fetch(`${URL}/api/follows${route.params.host._id}`, {
-    //     method: 'DELETE',
-    //     headers: {
-    //       Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
-    //     },
-    //   });
-    //   console.log(await res.json());
-    //   const resJson = await res.json();
-    //   setFollowedId(undefined);
-    //   setIsFollow(false);
-    //   setFollowedId(resJson.data._id);
-    // } catch (e) {
-    //   console.log(e);
-    // }
+  const unFollowHandler = async (id: string) => {
+    try {
+      const res = await fetch(`${URL}/api/follows/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
+        },
+      });
+      setFollowedId(undefined);
+      setIsFollow(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -104,10 +92,9 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
         setOwnProfile(jsonRes.data);
         const resFollowing = await fetch(`${URL}/api/follows/following/${jsonRes.data._id}`);
         const jsonResFollowing = await resFollowing.json();
-
         if ('data' in jsonResFollowing) {
           for (let i = 0; i < jsonResFollowing.data.length; i++) {
-            if (jsonResFollowing.data[i].followedBy._id === jsonRes.data._id) {
+            if (jsonResFollowing.data[i].following._id === route.params.host._id) {
               setIsFollow(true);
               setFollowedId(jsonResFollowing.data[i]._id);
               return;
@@ -166,7 +153,7 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
                   color: 'black',
                   textAlign: 'center',
                 }}
-                onPress={unFollowHandler}
+                onPress={() => unFollowHandler(followedId)}
               >
                 Unfollow
               </Button>
