@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Box, Image, VStack, Center, Input, Icon } from 'native-base';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { Text, Center, Input, Icon } from 'native-base';
+import { View, StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { useIsFocused } from '@react-navigation/native';
 import { URL } from '@env';
+import SafeAreaView from '../components/SafeAreaView';
 
 import EventCard from '../components/EventCard';
 
@@ -51,91 +52,84 @@ const SearchQueryScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <VStack paddingTop={10} position="absolute">
-        <Ionicons
-          name="chevron-back-sharp"
-          size={50}
-          color="black"
-          paddingLeft={4}
-          paddingTop={2}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      </VStack>
-      <VStack paddingTop={10} paddingRight={2} width="100%">
-        <View>
-          <Center>
-            <VStack width="80%" space={2}>
-              <Input
-                placeholder="Search"
-                variant="filled"
-                width="100%"
-                bg="white"
-                size="lg"
-                height={55}
-                left={5}
-                value={query}
-                borderRadius={30}
-                px={2}
-                onChangeText={(text) => {
-                  setQuery(text);
-                }}
-                _web={{
-                  _focus: {
-                    borderColor: 'white',
-                    style: {},
-                  },
-                }}
-                InputLeftElement={
-                  <Icon as={<MaterialIcons name="search" />} ml="5" size={30} color="black" />
-                }
-                InputRightElement={
-                  <Icon
-                    as={
-                      <MaterialIcons
-                        name="clear"
-                        onPress={() => {
-                          setQuery('');
-                          setEventList([]);
-                        }}
-                      />
-                    }
-                    mr="5"
-                    size={6}
-                    color="black"
-                  />
-                }
-              />
-            </VStack>
-          </Center>
-        </View>
-      </VStack>
-
-      <ScrollView>
-        {eventList.length
-          ? eventList.map((event: any, key) => {
-              return (
-                <EventCard
-                  navigation={navigation}
-                  key={key}
-                  eventInfo={event}
-                  location={location}
+      <SafeAreaView>
+        <View style={styles.topBar}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <Ionicons name="chevron-back-sharp" size={50} color="black" />
+          </TouchableWithoutFeedback>
+          <>
+            <Input
+              placeholder="Search"
+              variant="filled"
+              width="75%"
+              bg="white"
+              size="lg"
+              height={55}
+              value={query}
+              borderRadius={30}
+              onChangeText={(text) => {
+                setQuery(text);
+              }}
+              InputLeftElement={
+                <Icon as={<MaterialIcons name="search" />} ml="5" size={30} color="black" />
+              }
+              InputRightElement={
+                <Icon
+                  as={
+                    <MaterialIcons
+                      name="clear"
+                      onPress={() => {
+                        setQuery('');
+                        setEventList([]);
+                      }}
+                    />
+                  }
+                  mr="5"
+                  size={6}
+                  color="black"
                 />
-              );
-            })
-          : null}
+              }
+            />
+          </>
+        </View>
 
-        {result ? (
-          <Center>
-            <Text fontSize="xl" fontWeight="bold" mt={6}>
-              {result}
-            </Text>
-          </Center>
-        ) : null}
-      </ScrollView>
+        <ScrollView>
+          {eventList.length
+            ? eventList.map((event: any, key) => {
+                return (
+                  <EventCard
+                    navigation={navigation}
+                    key={key}
+                    eventInfo={event}
+                    location={location}
+                  />
+                );
+              })
+            : null}
+
+          {result ? (
+            <Center>
+              <Text fontSize="xl" fontWeight="bold" mt={6}>
+                {result}
+              </Text>
+            </Center>
+          ) : null}
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 };
 
+const styles = StyleSheet.create({
+  topBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginVertical: 10,
+  },
+});
 export default SearchQueryScreen;
