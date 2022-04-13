@@ -22,7 +22,7 @@ const SignupScreen = ({ navigation }: any) => {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
 
-  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [signupError, setSignupError] = useState('');
 
   const onHandleSignup = () => {
