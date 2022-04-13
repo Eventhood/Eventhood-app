@@ -34,7 +34,7 @@ const TopicScreen = ({ route, navigation }: any) => {
   return (
     <ScrollView>
       <Box mt={8} mb={4} ml={4}>
-        <Text fontSize="xl" fontWeight="semibold">
+        <Text fontSize="xl" fontWeight="bold">
           {route.params.topic.name}
         </Text>
       </Box>

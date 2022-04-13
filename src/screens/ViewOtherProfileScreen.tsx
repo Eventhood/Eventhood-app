@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { Text, Center, Button, Container, Avatar } from 'native-base';
+import { Text, Center, Button, Container, Avatar, Modal } from 'native-base';
 import { URL } from '@env';
 import * as Location from 'expo-location';
 import { useIsFocused } from '@react-navigation/native';
@@ -19,6 +19,7 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
   const [location, setLocation] = useState<any>();
   const [isFollow, setIsFollow] = useState<any>(undefined);
   const [followedId, setFollowedId] = useState<any>(undefined);
+  const [showModal2, setShowModal2] = useState(false);
 
   const isFocused = useIsFocused();
 
@@ -72,6 +73,7 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
           Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
         },
       });
+      setShowModal2(true);
       setFollowedId(undefined);
       setIsFollow(false);
     } catch (e) {
@@ -229,6 +231,30 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
           <Text fontSize="lg">No Event</Text>
         </Center>
       )}
+      <Modal
+        isOpen={showModal2}
+        onClose={() => {
+          setShowModal2(false);
+        }}
+      >
+        <Modal.Content style={styles.modal}>
+          <Modal.Body>
+            <Center>
+              <Text fontSize="md" fontWeight="normal" m={4}>
+                User unfollow.
+              </Text>
+            </Center>
+            <Button
+              style={styles.button}
+              onPress={() => {
+                setShowModal2(false);
+              }}
+            >
+              OK
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </ScrollView>
   );
 };
@@ -263,6 +289,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#EF4444',
+  },
+  button: {
+    backgroundColor: '#3B82F6',
+    flex: 1,
+    height: 50,
+    marginTop: 20,
+  },
+  modal: {
+    padding: 10,
   },
 });
 

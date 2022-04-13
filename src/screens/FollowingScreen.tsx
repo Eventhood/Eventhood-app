@@ -1,4 +1,4 @@
-import { Avatar, Text, Button, ScrollView, Box, HStack, Center, VStack } from 'native-base';
+import { Avatar, Text, Button, ScrollView, Box, Modal, Center, VStack } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
@@ -13,6 +13,7 @@ const FollowingScreen = () => {
   const isFocused = useIsFocused();
   const [followings, setFollowings] = useState<any>([]);
   const [userUUID, setUserUUID] = useState('');
+  const [showModal2, setShowModal2] = useState(false);
 
   const unFollowHandler = async (followingId: string) => {
     try {
@@ -26,6 +27,7 @@ const FollowingScreen = () => {
       const followings = await fetch(`${URL}/api/follows/following/${userUUID}`);
 
       const jsonResFollowing = await followings.json();
+      setShowModal2(true);
       if ('data' in jsonResFollowing) {
         setFollowings(jsonResFollowing.data);
       } else {
@@ -104,6 +106,30 @@ const FollowingScreen = () => {
           </Center>
         )}
       </ScrollView>
+      <Modal
+        isOpen={showModal2}
+        onClose={() => {
+          setShowModal2(false);
+        }}
+      >
+        <Modal.Content style={styles.modal}>
+          <Modal.Body>
+            <Center>
+              <Text fontSize="md" fontWeight="normal" m={4}>
+                User unfollow.
+              </Text>
+            </Center>
+            <Button
+              style={styles.button}
+              onPress={() => {
+                setShowModal2(false);
+              }}
+            >
+              OK
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </View>
   );
 };
@@ -119,6 +145,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#EF4444',
+  },
+  button: {
+    backgroundColor: '#3B82F6',
+    flex: 1,
+    height: 50,
+    marginTop: 20,
+  },
+  modal: {
+    padding: 10,
   },
   avatarBox: {
     margin: 20,

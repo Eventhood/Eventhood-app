@@ -22,10 +22,11 @@ const SearchScreen = ({ navigation }: any) => {
       <Box mt={8}>
         <SearchBar navigation={navigation} path="SearchQueryEvent" />
       </Box>
-      <Text fontSize={'2xl'} ml="4">
-        Categories
-      </Text>
+
       <ScrollView>
+        <Text fontSize={'2xl'} ml="4">
+          Categories
+        </Text>
         <View style={styles.flexContainer}>
           {category
             ? category.map((cat: any, key) => {
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    paddingBottom: 150,
   },
   image: {
     width: 160,

@@ -10,7 +10,7 @@ const TopicCard = ({ name }: { name: string }) => {
           <MaterialIcons name="format-list-bulleted" size={30} color="#1e293b" />
         </Box>
         <Box style={styles.topicCardName}>
-          <Text isTruncated maxW="85%">
+          <Text isTruncated maxW="85%" fontWeight="bold">
             {name}
           </Text>
         </Box>

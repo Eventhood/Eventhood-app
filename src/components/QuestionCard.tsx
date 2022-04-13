@@ -10,7 +10,7 @@ const QuestionCard = ({ name }: { name: string }) => {
           <MaterialCommunityIcons name="file-document" size={30} color="#1e293b" />
         </Box>
         <Box style={styles.topicCardName}>
-          <Text>{name}</Text>
+          <Text fontWeight="bold">{name}</Text>
         </Box>
       </Flex>
     </Box>

@@ -1,4 +1,4 @@
-import { Text, Box, Image } from 'native-base';
+import { Text, Box, Image, Center } from 'native-base';
 import { StyleSheet, View, ScrollView, Platform, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
@@ -17,10 +17,9 @@ const SearchCategoryScreen = ({ navigation, route }: any) => {
   useEffect(() => {
     (async () => {
       try {
-        console.log(route.params.catInfo._id);
         const res = await fetch(`${URL}/api/events/category/${route.params.catInfo._id}`);
         const jsonRes = await res.json();
-        setEventList(jsonRes.data);
+        if ('data' in jsonRes && jsonRes.data) setEventList(jsonRes.data);
       } catch (e) {
         console.log('error on fetch post');
       }
@@ -76,18 +75,19 @@ const SearchCategoryScreen = ({ navigation, route }: any) => {
           </View>
         </Box>
 
-        {eventList.length
-          ? eventList.map((event: any, key) => {
-              return (
-                <EventCard
-                  navigation={navigation}
-                  key={key}
-                  eventInfo={event}
-                  location={location}
-                />
-              );
-            })
-          : null}
+        {eventList.length != 0 ? (
+          eventList.map((event: any, key) => {
+            return (
+              <EventCard navigation={navigation} key={key} eventInfo={event} location={location} />
+            );
+          })
+        ) : (
+          <Center>
+            <Text fontSize="lg" fontWeight="semibold" m={8}>
+              No Result
+            </Text>
+          </Center>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
