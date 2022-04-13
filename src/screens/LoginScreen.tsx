@@ -22,7 +22,7 @@ const LoginScreen = ({ navigation }: any) => {
     if (email.trim() === '' || password.trim() === '') {
       setLoginError('Username or Password cannot be empty');
     } else {
-      signInWithEmailAndPassword(auth, email, password)
+      signInWithEmailAndPassword(auth, email.trim(), password.trim())
         .then((userCredential) => {})
         .catch((error) => {
           setLoginError('Your email or password may be incorrect.');
