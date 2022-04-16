@@ -104,7 +104,7 @@ const ReportEventScreen = ({ navigation }: any) => {
         </View>
         <View style={styles.spacing}>
           <Text fontSize="3xl" fontWeight="normal">
-            Reporting Title
+            Report
           </Text>
         </View>
         <View>
