@@ -21,7 +21,6 @@ const SearchQueryScreen = ({ navigation }: any) => {
     const debounce = setTimeout(() => {
       (async () => {
         if (query.length > 0) {
-          console.log(query);
           const res = await fetch(`${URL}/api/events/search?query=${query}`);
           const jsonRes = await res.json();
           if ('data' in jsonRes) {
