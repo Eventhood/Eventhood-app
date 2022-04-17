@@ -17,15 +17,21 @@ const LoginScreen = ({ navigation }: any) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [loginError, setLoginError] = useState('');
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onLogin = () => {
     if (email.trim() === '' || password.trim() === '') {
       setLoginError('Username or Password cannot be empty');
     } else {
+      setIsLoading(true);
+
       signInWithEmailAndPassword(auth, email.trim(), password.trim())
-        .then((userCredential) => {})
+        .then((userCredential) => {
+          setIsLoading(false);
+        })
         .catch((error) => {
           setLoginError('Your email or password may be incorrect.');
+          setIsLoading(false);
         });
     }
   };
@@ -91,7 +97,11 @@ const LoginScreen = ({ navigation }: any) => {
               Forgot Password?
             </Text>
 
-            <Button style={styles.button} onPress={onLogin}>
+            <Button
+              style={isLoading ? styles.buttonDisable : styles.button}
+              onPress={onLogin}
+              disabled={isLoading}
+            >
               Login
             </Button>
 
@@ -132,6 +142,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#3B82F6',
+    margin: 20,
+    height: 50,
+  },
+  buttonDisable: {
+    backgroundColor: '#3B82F675',
     margin: 20,
     height: 50,
   },

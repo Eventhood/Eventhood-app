@@ -24,6 +24,7 @@ const SignupScreen = ({ navigation }: any) => {
 
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [signupError, setSignupError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onHandleSignup = () => {
     if (username.trim() === '') {
@@ -35,6 +36,7 @@ const SignupScreen = ({ navigation }: any) => {
     } else if (password.trim() === '') {
       setSignupError('Password cannot be empty');
     } else {
+      setIsLoading(true);
       createUserWithEmailAndPassword(auth, email, password)
         .then((createdUserData: UserCredential) => {
           (async () => {
@@ -65,8 +67,10 @@ const SignupScreen = ({ navigation }: any) => {
               setSignupError(error.message);
             });
           })();
+          setIsLoading(false);
         })
         .catch((error) => {
+          setIsLoading(false);
           switch (error.code) {
             case 'auth/invalid-email':
               setSignupError('Invalid email');
@@ -151,7 +155,11 @@ const SignupScreen = ({ navigation }: any) => {
               />
             </FormControl>
 
-            <Button style={styles.button} onPress={onHandleSignup}>
+            <Button
+              disabled={isLoading}
+              style={isLoading ? styles.buttonDisable : styles.button}
+              onPress={onHandleSignup}
+            >
               Create an Account
             </Button>
 
@@ -187,6 +195,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#3B82F6',
+    margin: 20,
+    height: 50,
+  },
+  buttonDisable: {
+    backgroundColor: '#3B82F675',
     margin: 20,
     height: 50,
   },

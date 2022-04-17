@@ -13,14 +13,18 @@ const ForgotPassword = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [forgotPassError, setForgotPassError] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const forgotPasswordHandler = () => {
+    setIsLoading(true);
     sendPasswordResetEmail(auth, email)
       .then(() => {
         setShowModal(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         setForgotPassError(error.message);
+        setIsLoading(false);
       });
   };
 
@@ -52,12 +56,17 @@ const ForgotPassword = ({ navigation }: any) => {
                 _text={{
                   color: '#3B82F6',
                 }}
-                style={styles.buttonOutline}
+                style={isLoading ? styles.buttonOutlineDisabled : styles.buttonOutline}
+                disabled={isLoading}
                 onPress={() => navigation.navigate('Login')}
               >
                 Return
               </Button>
-              <Button style={styles.button} onPress={forgotPasswordHandler}>
+              <Button
+                style={isLoading ? styles.buttonDisabled : styles.button}
+                disabled={isLoading}
+                onPress={forgotPasswordHandler}
+              >
                 Send
               </Button>
             </HStack>
@@ -111,6 +120,20 @@ const styles = StyleSheet.create({
   },
   buttonOutline: {
     backgroundColor: '#ffffff',
+    borderColor: '#3B82F6',
+    borderWidth: 2,
+    flex: 1,
+    marginTop: 20,
+    height: 50,
+  },
+  buttonDisabled: {
+    backgroundColor: '#3B82F675',
+    flex: 1,
+    height: 50,
+    marginTop: 20,
+  },
+  buttonOutlineDisabled: {
+    backgroundColor: '#ffffff75',
     borderColor: '#3B82F6',
     borderWidth: 2,
     flex: 1,
