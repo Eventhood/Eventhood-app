@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }: any) => {
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
 
-  const onLogin = () => {
+  const onLogin = ({ navigation }: any) => {
     if (email.trim() === '' || password.trim() === '') {
       setLoginError('Username or Password cannot be empty');
     } else {
@@ -28,6 +28,7 @@ const LoginScreen = ({ navigation }: any) => {
       signInWithEmailAndPassword(auth, email.trim(), password.trim())
         .then((userCredential) => {
           setIsLoading(false);
+          navigation.navigate('Home-b');
         })
         .catch((error) => {
           setLoginError('Your email or password may be incorrect.');
