@@ -1,6 +1,6 @@
 import { Avatar, Text, Button, ScrollView, Box, Modal, Center, VStack } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 
@@ -9,7 +9,7 @@ import { app } from '../utils/firebase';
 
 const auth = getAuth(app);
 
-const FollowingScreen = () => {
+const FollowingScreen = ({ navigation }: any) => {
   const isFocused = useIsFocused();
   const [followings, setFollowings] = useState<any>([]);
   const [userUUID, setUserUUID] = useState('');
@@ -68,34 +68,42 @@ const FollowingScreen = () => {
         {followings.length !== 0 ? (
           followings.map((following: any, key: any) => {
             return (
-              <Box p={4} style={styles.avatarBox} shadow={'4'} key={key}>
-                <Box style={styles.avatarLeftBox}>
-                  <Avatar source={{ uri: following.following.photoURL }} shadow={'6'}>
-                    AK
-                  </Avatar>
-                  <VStack space={2}>
-                    <Text ml={4} isTruncated maxW="200">
-                      {following.following.displayName}
-                    </Text>
-                    <Text ml={4} isTruncated maxW="200">
-                      @{following.following.accountHandle}
-                    </Text>
-                  </VStack>
+              <TouchableHighlight
+                activeOpacity={0.5}
+                underlayColor="#D1D5DB75"
+                onPress={() =>
+                  navigation.navigate('OtherUserProfile', { host: following.following })
+                }
+              >
+                <Box p={4} style={styles.avatarBox} shadow={'4'} key={key}>
+                  <Box style={styles.avatarLeftBox}>
+                    <Avatar source={{ uri: following.following.photoURL }} shadow={'6'}>
+                      AK
+                    </Avatar>
+                    <VStack space={2}>
+                      <Text ml={4} isTruncated maxW="200">
+                        {following.following.displayName}
+                      </Text>
+                      <Text ml={4} isTruncated maxW="200">
+                        @{following.following.accountHandle}
+                      </Text>
+                    </VStack>
+                  </Box>
+                  <Center>
+                    <Button
+                      style={styles.unFollow}
+                      _text={{
+                        color: 'black',
+                        textAlign: 'center',
+                      }}
+                      shadow={'4'}
+                      onPress={() => unFollowHandler(following._id)}
+                    >
+                      Unfollow
+                    </Button>
+                  </Center>
                 </Box>
-                <Center>
-                  <Button
-                    style={styles.unFollow}
-                    _text={{
-                      color: 'black',
-                      textAlign: 'center',
-                    }}
-                    shadow={'4'}
-                    onPress={() => unFollowHandler(following._id)}
-                  >
-                    Unfollow
-                  </Button>
-                </Center>
-              </Box>
+              </TouchableHighlight>
             );
           })
         ) : (

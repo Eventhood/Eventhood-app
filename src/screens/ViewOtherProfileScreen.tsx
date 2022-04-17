@@ -85,6 +85,8 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
     (async () => {
       try {
         await fetchProfile();
+        await fetchRating();
+
         const res = await fetch(`${URL}/api/users/${auth.currentUser?.uid}`, {
           headers: {
             Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`,
@@ -106,7 +108,6 @@ const ViewProfileScreen = ({ route, navigation }: any) => {
         } else {
           setIsFollow(false);
         }
-        await fetchRating();
       } catch (e) {
         console.log(e);
       }
